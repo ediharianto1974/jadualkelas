@@ -15,7 +15,6 @@
             --card-bg: rgba(10, 10, 15, 0.95);
         }
 
-        /* ANIMASI */
         @keyframes pulseGlow {
             0% { box-shadow: 0 0 5px var(--neon-green); }
             50% { box-shadow: 0 0 20px var(--neon-green); }
@@ -217,21 +216,20 @@
             const tt = document.getElementById('ttBody');
             tt.innerHTML = ""; 
             hariArr.forEach((h, i) => {
-                let rTT = `<tr id="row-${i}">
-                    <td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.75rem;">${h}</td>`;
+                let rTT = '<tr id="row-' + i + '">';
+                rTT += '<td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.75rem;">' + h + '</td>';
                 for(let j=0; j<12; j++) {
                     if(j === 5) {
-                        rTT += `<td class="rehat-col">${rehatTxt[i]}</td>`;
+                        rTT += '<td class="rehat-col">' + rehatTxt[i] + '</td>';
                     } else {
-                        rTT += `<td class="slot-cell" data-day="${i}" data-slot="${j}">
-                            <div class="cell-content">
-                                <input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">
-                                <input type="text" class="teach-in tt-in" placeholder="GURU">
-                            </div>
-                        </td>`;
+                        rTT += '<td class="slot-cell" data-day="' + i + '" data-slot="' + j + '">';
+                        rTT += '<div class="cell-content">';
+                        rTT += '<input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">';
+                        rTT += '<input type="text" class="teach-in tt-in" placeholder="GURU">';
+                        rTT += '</div></td>';
                     }
                 }
-                rTT += `</tr>`;
+                rTT += '</tr>';
                 tt.innerHTML += rTT;
             });
 
@@ -258,14 +256,12 @@
             else if (val === 'SEJARAH') val = 'SEJ';
             else if (val.includes('PJ')) val = 'PJK';
             const td = el.closest('td');
-            subjekList.forEach(s => td.classList.remove(`color-${s}`));
-            if (subjekList.includes(val)) td.classList.add(`color-${val}`);
+            subjekList.forEach(s => td.classList.remove('color-' + s));
+            if (subjekList.includes(val)) td.classList.add('color-' + val);
         };
 
         function runSystem() {
             const now = new Date();
-            
-            // Format jam manual supaya lebih stabil pada Rasp Pie
             const jam = now.getHours().toString().padStart(2, '0');
             const min = now.getMinutes().toString().padStart(2, '0');
             const saat = now.getSeconds().toString().padStart(2, '0');
@@ -278,9 +274,9 @@
             }
 
             const currentMins = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; // Isnin=0, Ahad=-1
+            const currentDay = now.getDay() - 1; 
 
-            // RESET GAYA LAMA
+            // RESET
             document.querySelectorAll('.slot-cell').forEach(c => {
                 c.classList.remove('active-period');
                 const oldBar = c.querySelector('.progress-container');
@@ -288,22 +284,22 @@
             });
             document.querySelectorAll('#ttBody tr').forEach(row => row.classList.remove('active-row'));
 
-            // LOGIK HARI MINGGU
+            // JIKA SABTU/AHAD
             if (currentDay < 0 || currentDay > 4) {
                 document.getElementById('alarmBanner').classList.remove('active');
                 return; 
             }
 
-            // HIGHLIGHT HARI INI
-            const rowToday = document.getElementById(`row-${currentDay}`);
+            // HIGHLIGHT HARI
+            const rowToday = document.getElementById('row-' + currentDay);
             if(rowToday) rowToday.classList.add('active-row');
 
-            // LOGIK SLOT MASA
+            // LOGIK SLOT
             slotStarts.forEach((start, idx) => {
                 const end = slotEnds[idx];
                 if (currentMins >= start && currentMins < end) {
-                    const visualSlot = idx >= 5 ? idx + 1 : idx;
-                    const activeCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${visualSlot}"]`);
+                    const visualSlot = (idx >= 5) ? (idx + 1) : idx;
+                    const activeCell = document.querySelector('.slot-cell[data-day="' + currentDay + '"][data-slot="' + visualSlot + '"]');
                     
                     if (activeCell) {
                         activeCell.classList.add('active-period');
@@ -315,22 +311,23 @@
                         const percent = (elapsed / total) * 100;
                         const timeLeft = end - currentMins;
 
-                        // Tambah Progress Bar
                         if(!activeCell.querySelector('.progress-container')) {
                             let pContainer = document.createElement('div');
                             pContainer.className = 'progress-container';
                             const blinkClass = (timeLeft <= 5) ? 'last-minutes' : '';
-                            pContainer.innerHTML = `<div class="progress-bar ${blinkClass}" style="width:${percent}%"></div>`;
+                            pContainer.innerHTML = '<div class="progress-bar ' + blinkClass + '" style="width:' + percent + '%"></div>';
                             activeCell.querySelector('.cell-content').appendChild(pContainer);
                         } else {
-                            activeCell.querySelector('.progress-bar').style.width = percent + "%";
-                            if(timeLeft <= 5) activeCell.querySelector('.progress-bar').classList.add('last-minutes');
+                            const pBar = activeCell.querySelector('.progress-bar');
+                            if(pBar) {
+                                pBar.style.width = percent + "%";
+                                if(timeLeft <= 5) pBar.classList.add('last-minutes');
+                            }
                         }
 
-                        // Alarm Banner
                         const banner = document.getElementById('alarmBanner');
                         if(timeLeft <= 5 && currentSub !== "-" && currentSub !== "") {
-                            banner.innerText = `⚠️ ${currentSub} TAMAT DALAM ${timeLeft} MINIT!`;
+                            banner.innerText = "⚠️ " + currentSub + " TAMAT DALAM " + timeLeft + " MINIT!";
                             banner.classList.add('active');
                             if(!alarmTriggered) {
                                 document.getElementById('alarmSound').play().catch(() => {});
@@ -346,7 +343,8 @@
         }
 
         window.saveToFirebase = () => {
-            if (prompt("KOD AKSES:") !== AUTH_KOD) return alert("KOD SALAH!");
+            const kod = prompt("KOD AKSES:");
+            if (kod !== AUTH_KOD) return alert("KOD SALAH!");
             const data = { 
                 tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
                 t1: document.getElementById('teacher1').value,
@@ -356,7 +354,8 @@
         };
 
         window.resetFirebase = () => {
-            if (prompt("KOD PADAM:") !== AUTH_KOD) return alert("KOD SALAH!");
+            const kod = prompt("KOD PADAM:");
+            if (kod !== AUTH_KOD) return alert("KOD SALAH!");
             if(confirm("PADAM SEMUA?")) remove(dbRef).then(() => location.reload());
         }
 
