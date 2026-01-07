@@ -31,13 +31,11 @@
         * { box-sizing: border-box; margin: 0; padding: 0; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
 
         body {
-            background: url('space.gif') no-repeat center center fixed;
-            background-size: cover; background-color: #050505; color: white;
+            background-color: #050505; color: white;
             height: 100vh; width: 100vw; overflow: hidden;
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* HEADER BOX - STRUKTUR BARU */
         .header-box {
             margin-top: 15px; margin-bottom: 10px;
             background: var(--glass-bg); padding: 15px 30px; border-radius: 15px;
@@ -45,24 +43,22 @@
             width: 95%; max-width: 1300px;
         }
 
-        /* Container untuk baris tajuk & jam */
         .title-row {
             display: grid;
-            grid-template-columns: 1fr auto 1fr; /* Membahagi kepada 3 bahagian */
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
             width: 100%;
         }
 
         .title-row h1 {
-            grid-column: 2; /* Tajuk sentiasa di tengah (kolum 2) */
+            grid-column: 2;
             font-size: 1.8rem;
             letter-spacing: 2px;
             white-space: nowrap;
         }
 
-        /* JAM - SEBARIS DI KANAN */
         .clock {
-            grid-column: 3; /* Jam di kolum 3 (kanan) */
+            grid-column: 3;
             justify-self: end;
             color: var(--neon-blue); font-weight: 900; font-size: 1.8rem; 
             background: rgba(0,0,0,0.5); padding: 5px 20px; border-radius: 10px;
@@ -73,7 +69,6 @@
             text-align: center;
         }
 
-        /* GURU KELAS SECTION */
         .teacher-container {
             display: flex; gap: 15px; justify-content: center; margin-top: 15px; flex-wrap: wrap;
         }
@@ -116,7 +111,7 @@
         .teach-in { font-size: 0.5rem; opacity: 0.7; height: 25%; background: transparent; border: none; text-align: center; color: white; outline: none; }
         .rehat-col { background: rgba(255, 0, 85, 0.2) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.5rem; text-align: center; border: 1px solid var(--neon-pink) !important; width: 40px; }
 
-        /* --- KATEGORI WARNA SUBJEK --- */
+        /* WARNA SUBJEK */
         .color-BM { background: rgba(255, 0, 0, 0.3) !important; border-color: #ff0000 !important; }
         .color-BI { background: rgba(0, 81, 255, 0.3) !important; border-color: #0051ff !important; }
         .color-MT { background: rgba(255, 242, 0, 0.2) !important; border-color: #fff200 !important; }
@@ -218,7 +213,7 @@
         const AUTH_KOD = "jadualwaktu";
         let alarmTriggered = false;
 
-        function init() {
+        window.init = function() {
             const tt = document.getElementById('ttBody');
             tt.innerHTML = ""; 
             hariArr.forEach((h, i) => {
@@ -269,70 +264,85 @@
 
         function runSystem() {
             const now = new Date();
-            document.getElementById('liveClock').innerText = now.toLocaleTimeString('ms-MY', {hour12:false});
-            document.getElementById('todayDate').innerText = now.toLocaleDateString('ms-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            
+            // Format jam manual supaya lebih stabil pada Rasp Pie
+            const jam = now.getHours().toString().padStart(2, '0');
+            const min = now.getMinutes().toString().padStart(2, '0');
+            const saat = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('liveClock').innerText = jam + ":" + min + ":" + saat;
+            
+            try {
+                document.getElementById('todayDate').innerText = now.toLocaleDateString('ms-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            } catch(e) {
+                document.getElementById('todayDate').innerText = now.toDateString();
+            }
 
             const currentMins = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1;
+            const currentDay = now.getDay() - 1; // Isnin=0, Ahad=-1
 
-            document.querySelectorAll('#ttBody tr').forEach((row, idx) => {
-                row.classList.toggle('active-row', idx === currentDay);
-            });
-
+            // RESET GAYA LAMA
             document.querySelectorAll('.slot-cell').forEach(c => {
                 c.classList.remove('active-period');
                 const oldBar = c.querySelector('.progress-container');
                 if(oldBar) oldBar.remove();
             });
+            document.querySelectorAll('#ttBody tr').forEach(row => row.classList.remove('active-row'));
 
-            if(currentDay >= 0 && currentDay <= 4) {
-                slotStarts.forEach((start, idx) => {
-                    const end = slotEnds[idx];
-                    if (currentMins >= start && currentMins < end) {
-                        const visualSlot = idx >= 5 ? idx + 1 : idx;
-                        const activeCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${visualSlot}"]`);
+            // LOGIK HARI MINGGU
+            if (currentDay < 0 || currentDay > 4) {
+                document.getElementById('alarmBanner').classList.remove('active');
+                return; 
+            }
+
+            // HIGHLIGHT HARI INI
+            const rowToday = document.getElementById(`row-${currentDay}`);
+            if(rowToday) rowToday.classList.add('active-row');
+
+            // LOGIK SLOT MASA
+            slotStarts.forEach((start, idx) => {
+                const end = slotEnds[idx];
+                if (currentMins >= start && currentMins < end) {
+                    const visualSlot = idx >= 5 ? idx + 1 : idx;
+                    const activeCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${visualSlot}"]`);
+                    
+                    if (activeCell) {
+                        activeCell.classList.add('active-period');
+                        const subIn = activeCell.querySelector('.sub-in');
+                        const currentSub = subIn ? subIn.value : "-";
                         
-                        if (activeCell) {
-                            activeCell.classList.add('active-period');
-                            const currentSub = activeCell.querySelector('.sub-in').value;
-                            let actualStart = start;
-                            let actualEnd = end;
+                        const total = end - start;
+                        const elapsed = currentMins - start;
+                        const percent = (elapsed / total) * 100;
+                        const timeLeft = end - currentMins;
 
-                            const prevVisual = (idx - 1) >= 5 ? (idx - 1) + 1 : (idx - 1);
-                            const prevCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${prevVisual}"]`);
-                            if(prevCell && prevCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualStart = slotStarts[idx-1];
-
-                            const nextVisual = (idx + 1) >= 5 ? (idx + 1) + 1 : (idx + 1);
-                            const nextCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${nextVisual}"]`);
-                            if(nextCell && nextCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualEnd = slotEnds[idx+1];
-
-                            const total = actualEnd - actualStart;
-                            const elapsed = currentMins - actualStart;
-                            const percent = (elapsed / total) * 100;
-                            const timeLeft = actualEnd - currentMins;
-
+                        // Tambah Progress Bar
+                        if(!activeCell.querySelector('.progress-container')) {
                             let pContainer = document.createElement('div');
                             pContainer.className = 'progress-container';
                             const blinkClass = (timeLeft <= 5) ? 'last-minutes' : '';
                             pContainer.innerHTML = `<div class="progress-bar ${blinkClass}" style="width:${percent}%"></div>`;
                             activeCell.querySelector('.cell-content').appendChild(pContainer);
+                        } else {
+                            activeCell.querySelector('.progress-bar').style.width = percent + "%";
+                            if(timeLeft <= 5) activeCell.querySelector('.progress-bar').classList.add('last-minutes');
+                        }
 
-                            const banner = document.getElementById('alarmBanner');
-                            if(timeLeft <= 5 && currentSub !== "-") {
-                                banner.innerText = `⚠️ ${currentSub} TAMAT DALAM ${timeLeft} MINIT!`;
-                                banner.classList.add('active');
-                                if(!alarmTriggered) {
-                                    document.getElementById('alarmSound').play().catch(() => {});
-                                    alarmTriggered = true;
-                                }
-                            } else {
-                                banner.classList.remove('active');
-                                alarmTriggered = false;
+                        // Alarm Banner
+                        const banner = document.getElementById('alarmBanner');
+                        if(timeLeft <= 5 && currentSub !== "-" && currentSub !== "") {
+                            banner.innerText = `⚠️ ${currentSub} TAMAT DALAM ${timeLeft} MINIT!`;
+                            banner.classList.add('active');
+                            if(!alarmTriggered) {
+                                document.getElementById('alarmSound').play().catch(() => {});
+                                alarmTriggered = true;
                             }
+                        } else {
+                            banner.classList.remove('active');
+                            alarmTriggered = false;
                         }
                     }
-                });
-            }
+                }
+            });
         }
 
         window.saveToFirebase = () => {
