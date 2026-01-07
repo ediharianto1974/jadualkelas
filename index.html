@@ -37,31 +37,35 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
+        /* HEADER BOX - JAM DI DALAM */
         .header-box {
             text-align: center; margin-top: 15px; margin-bottom: 10px;
-            background: var(--glass-bg); padding: 15px 30px; border-radius: 15px;
-            border: 2px solid var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            background: var(--glass-bg); padding: 20px 30px; border-radius: 15px;
+            border: 2px solid var(--neon-blue); box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
             width: 95%; max-width: 1200px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        /* GURU KELAS STYLING - LEBIH PANJANG */
+        /* GAYA JAM BARU (DI DALAM HEADER) */
+        .clock {
+            color: var(--neon-blue); font-weight: 900; font-size: 2.5rem; 
+            background: rgba(0,0,0,0.4); padding: 5px 30px; border-radius: 12px;
+            border: 1px solid var(--neon-blue); margin-bottom: 15px;
+            text-shadow: 0 0 10px var(--neon-blue);
+            letter-spacing: 3px;
+        }
+
         .teacher-container {
             display: flex; gap: 20px; justify-content: center; margin-top: 12px; flex-wrap: wrap;
         }
         .teacher-badge {
             background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.5);
             padding: 8px 20px; border-radius: 30px; font-size: 0.75rem; display: flex; align-items: center; gap: 12px;
-            transition: 0.3s;
         }
-        .teacher-badge:focus-within {
-            border-color: var(--neon-blue); background: rgba(0, 243, 255, 0.15); box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-        .teacher-label { color: var(--neon-blue); font-weight: 900; letter-spacing: 1px; }
+        .teacher-label { color: var(--neon-blue); font-weight: 900; }
         .teacher-input-field {
             background: transparent; border: none; color: var(--neon-yellow);
-            font-weight: bold; width: 300px; /* RUANGAN DIPANJANGKAN */
-            outline: none; text-align: left; font-size: 0.85rem;
-            letter-spacing: 0.5px;
+            font-weight: bold; width: 300px; outline: none; text-align: left; font-size: 0.85rem;
         }
 
         .content-container {
@@ -73,7 +77,7 @@
 
         table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; min-width: 1100px; }
         th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.65rem; padding: 6px; border-radius: 5px; border: 1px solid var(--neon-blue); }
-        td { background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; transition: 0.3s; overflow: hidden; }
+        td { background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; overflow: hidden; }
         
         .active-row td:first-child { 
             background: var(--neon-blue) !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px var(--neon-blue);
@@ -98,12 +102,10 @@
         .color-BI { background: rgba(0,81,255,0.3) !important; border-color: #0051ff !important; }
         .color-MT { background: rgba(255,242,0,0.2) !important; border-color: #fff200 !important; }
         .color-SN { background: rgba(0,255,30,0.2) !important; border-color: #00ff1e !important; }
-        .color-PAI { background: rgba(0,234,255,0.2) !important; border-color: #00eaff !important; }
 
         .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .btn { padding: 8px 20px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
+        .btn { padding: 8px 20px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; font-size: 0.8rem; }
         .btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
-        .clock { position: fixed; top: 15px; right: 15px; color: var(--neon-blue); font-weight: 900; font-size: 1.4rem; background: rgba(0,0,0,0.8); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--neon-blue); z-index: 2000; }
         
         #alarmBanner {
             position: fixed; top: -120px; left: 0; width: 100%; background: linear-gradient(90deg, #ff0055, #ff0000);
@@ -116,19 +118,21 @@
 <body>
 
     <div id="alarmBanner">INFO: MEMULAKAN SISTEM...</div>
-    <div class="clock" id="liveClock">00:00:00</div>
     <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
     <div class="header-box">
+        <div class="clock" id="liveClock">00:00:00</div>
+        
         <h1>JADUAL WAKTU 6 CEMERLANG</h1>
+        
         <div class="teacher-container">
             <div class="teacher-badge">
                 <span class="teacher-label">GURU KELAS 1:</span>
-                <input type="text" id="teacher1" class="teacher-input-field" placeholder="MASUKKAN NAMA PENUH">
+                <input type="text" id="teacher1" class="teacher-input-field" placeholder="NAMA PENUH">
             </div>
             <div class="teacher-badge">
                 <span class="teacher-label">GURU KELAS 2:</span>
-                <input type="text" id="teacher2" class="teacher-input-field" placeholder="MASUKKAN NAMA PENUH">
+                <input type="text" id="teacher2" class="teacher-input-field" placeholder="NAMA PENUH">
             </div>
         </div>
         <h2 style="font-size:0.8rem; opacity:0.7; margin-top:12px;"><span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
@@ -206,10 +210,8 @@
             onValue(dbRef, (snapshot) => {
                 const d = snapshot.val();
                 if (!d) return;
-                
                 if(d.t1) document.getElementById('teacher1').value = d.t1;
                 if(d.t2) document.getElementById('teacher2').value = d.t2;
-
                 const ttIn = document.querySelectorAll('.tt-in');
                 d.tt?.forEach((v, i) => { 
                     if(ttIn[i]) {
