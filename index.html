@@ -33,6 +33,13 @@
             background-color: #050505; color: white;
             height: 100vh; width: 100vw; overflow: hidden;
             display: flex; flex-direction: column; align-items: center;
+            /* MENYEMBUNYIKAN KURSOR */
+            cursor: none !important; 
+        }
+
+        /* Memastikan kursor juga hilang pada input dan butang */
+        input, button, td, th {
+            cursor: none !important;
         }
 
         .header-box {
@@ -182,7 +189,7 @@
     <div class="btn-row">
         <button class="btn" onclick="saveToFirebase()">💾 SIMPAN SEMUA</button>
         <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM DATA</button>
-        <button class="btn" onclick="document.documentElement.requestFullscreen()">🖥️ SKRIN PENUH</button>
+        <button class="btn" onclick="openFullscreen()">🖥️ SKRIN PENUH</button>
     </div>
 
     <script type="module">
@@ -233,29 +240,21 @@
                 tt.innerHTML += rTT;
             });
 
-onValue(dbRef, (snapshot) => {
-    const d = snapshot.val();
-    if (!d) return;
-    
-    // Kemaskini Nama Guru
-    if(d.t1) document.getElementById('teacher1').value = d.t1;
-    if(d.t2) document.getElementById('teacher2').value = d.t2;
-    
-    const ttIn = document.querySelectorAll('.tt-in');
-    
-    // CARA SELAMAT: Periksa jika d.tt wujud sebelum buat loop
-    if (d.tt) {
-        for (var i = 0; i < d.tt.length; i++) {
-            if (ttIn[i]) {
-                ttIn[i].value = d.tt[i];
-                // Jika kotak itu adalah kotak subjek, warnakan
-                if (ttIn[i].classList.contains('sub-in')) {
-                    applyColor(ttIn[i]);
+            onValue(dbRef, (snapshot) => {
+                const d = snapshot.val();
+                if (!d) return;
+                if(d.t1) document.getElementById('teacher1').value = d.t1;
+                if(d.t2) document.getElementById('teacher2').value = d.t2;
+                const ttIn = document.querySelectorAll('.tt-in');
+                if (d.tt) {
+                    for (var i = 0; i < d.tt.length; i++) {
+                        if (ttIn[i]) {
+                            ttIn[i].value = d.tt[i];
+                            if (ttIn[i].classList.contains('sub-in')) applyColor(ttIn[i]);
+                        }
+                    }
                 }
-            }
-        }
-    }
-});
+            });
             setInterval(runSystem, 1000);
         }
 
@@ -286,7 +285,6 @@ onValue(dbRef, (snapshot) => {
             const currentMins = now.getHours() * 60 + now.getMinutes();
             const currentDay = now.getDay() - 1; 
 
-            // RESET
             document.querySelectorAll('.slot-cell').forEach(c => {
                 c.classList.remove('active-period');
                 const oldBar = c.querySelector('.progress-container');
@@ -294,17 +292,14 @@ onValue(dbRef, (snapshot) => {
             });
             document.querySelectorAll('#ttBody tr').forEach(row => row.classList.remove('active-row'));
 
-            // JIKA SABTU/AHAD
             if (currentDay < 0 || currentDay > 4) {
                 document.getElementById('alarmBanner').classList.remove('active');
                 return; 
             }
 
-            // HIGHLIGHT HARI
             const rowToday = document.getElementById('row-' + currentDay);
             if(rowToday) rowToday.classList.add('active-row');
 
-            // LOGIK SLOT
             slotStarts.forEach((start, idx) => {
                 const end = slotEnds[idx];
                 if (currentMins >= start && currentMins < end) {
@@ -369,8 +364,18 @@ onValue(dbRef, (snapshot) => {
             if(confirm("PADAM SEMUA?")) remove(dbRef).then(() => location.reload());
         }
 
+        window.openFullscreen = () => {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        }
+
         init();
     </script>
 </body>
 </html>
-
