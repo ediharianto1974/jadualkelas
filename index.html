@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Jadual Waktu 6C - SKAG</title>
-    <style>
+<style>
         :root {
             --neon-blue: #00f3ff;
             --neon-pink: #ff0055;
@@ -27,26 +27,38 @@
             100% { background: var(--danger-red); opacity: 1; }
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
-
-        body {
-            background-color: #050505; color: white;
-            height: 100vh; width: 100vw; overflow: hidden;
-            display: flex; flex-direction: column; align-items: center;
-            /* MENYEMBUNYIKAN KURSOR */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            text-transform: uppercase; 
+            font-family: 'Segoe UI', sans-serif; 
+            /* SEMBUNYIKAN KURSOR PADA SEMUA ELEMEN */
             cursor: none !important; 
         }
 
-        /* Memastikan kursor juga hilang pada input dan butang */
-        input, button, td, th {
-            cursor: none !important;
+        body {
+            background-color: #050505; 
+            color: white;
+            height: 100vh; 
+            width: 100vw; 
+            overflow: hidden;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
         }
 
         .header-box {
-            margin-top: 15px; margin-bottom: 10px;
-            background: var(--glass-bg); padding: 15px 30px; border-radius: 15px;
-            border: 2px solid var(--neon-blue); box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
-            width: 95%; max-width: 1300px;
+            margin-top: 10px; 
+            margin-bottom: 5px;
+            background: var(--glass-bg); 
+            padding: 10px 20px; 
+            border-radius: 10px;
+            border: 2px solid var(--neon-blue); 
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+            /* DIKEMASKINI: GUNA 100% LEBAR TANPA HAD MAX-WIDTH */
+            width: 100%; 
+            max-width: 100%; 
         }
 
         .title-row {
@@ -58,7 +70,7 @@
 
         .title-row h1 {
             grid-column: 2;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             letter-spacing: 2px;
             white-space: nowrap;
         }
@@ -66,56 +78,163 @@
         .clock {
             grid-column: 3;
             justify-self: end;
-            color: var(--neon-blue); font-weight: 900; font-size: 1.8rem; 
-            background: rgba(0,0,0,0.5); padding: 5px 20px; border-radius: 10px;
+            color: var(--neon-blue); 
+            font-weight: 900; 
+            font-size: 1.6rem; 
+            background: rgba(0,0,0,0.5); 
+            padding: 5px 15px; 
+            border-radius: 8px;
             border: 1px solid var(--neon-blue);
             text-shadow: 0 0 10px var(--neon-blue);
             letter-spacing: 2px;
-            min-width: 160px;
+            min-width: 150px;
             text-align: center;
         }
 
         .teacher-container {
-            display: flex; gap: 15px; justify-content: center; margin-top: 15px; flex-wrap: wrap;
+            display: flex; 
+            gap: 10px; 
+            justify-content: center; 
+            margin-top: 8px; 
+            flex-wrap: wrap;
         }
+        
         .teacher-badge {
-            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.5);
-            padding: 6px 15px; border-radius: 30px; font-size: 0.7rem; display: flex; align-items: center; gap: 10px;
+            background: rgba(0, 243, 255, 0.05); 
+            border: 1px solid rgba(0, 243, 255, 0.5);
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.65rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
         }
+        
         .teacher-label { color: var(--neon-blue); font-weight: 900; }
+        
         .teacher-input-field {
-            background: transparent; border: none; color: var(--neon-yellow);
-            font-weight: bold; width: 280px; outline: none; text-align: left; font-size: 0.8rem;
+            background: transparent; 
+            border: none; 
+            color: var(--neon-yellow);
+            font-weight: bold; 
+            width: 250px; 
+            outline: none; 
+            text-align: left; 
+            font-size: 0.75rem;
         }
 
         .content-container {
-            width: 98%; max-width: 1400px; flex-grow: 1;
-            background: var(--card-bg); border-radius: 20px;
-            border: 1px solid rgba(0, 243, 255, 0.2); padding: 10px;
-            backdrop-filter: blur(15px); overflow-x: auto; margin-bottom: 10px;
+            /* DIKEMASKINI: PENUH KE TEPI KIRI DAN KANAN */
+            width: 100%; 
+            max-width: 100%; 
+            flex-grow: 1;
+            background: var(--card-bg); 
+            border-radius: 0; 
+            border: none;
+            padding: 5px;
+            backdrop-filter: blur(15px); 
+            overflow: hidden; 
+            margin-bottom: 0;
         }
 
-        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; min-width: 1100px; }
-        th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.65rem; padding: 6px; border-radius: 5px; border: 1px solid var(--neon-blue); }
-        td { background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; overflow: hidden; }
+        table { 
+            width: 100%; 
+            height: 100%; 
+            border-collapse: separate; 
+            border-spacing: 3px; 
+            table-layout: fixed; 
+        }
+
+        th { 
+            background: rgba(0, 243, 255, 0.1); 
+            color: var(--neon-blue); 
+            font-size: 0.6rem; 
+            padding: 4px; 
+            border-radius: 4px; 
+            border: 1px solid var(--neon-blue); 
+        }
+
+        td { 
+            background: rgba(255, 255, 255, 0.03); 
+            border-radius: 4px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            position: relative; 
+            overflow: hidden; 
+        }
         
         .active-row td:first-child { 
-            background: var(--neon-blue) !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px var(--neon-blue);
+            background: var(--neon-blue) !important; 
+            color: black !important; 
+            font-weight: 900; 
+            box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        .active-period { border: 3px solid var(--neon-green) !important; animation: pulseGlow 2s infinite ease-in-out; z-index: 10; }
+        .active-period { 
+            border: 3px solid var(--neon-green) !important; 
+            animation: pulseGlow 2s infinite ease-in-out; 
+            z-index: 10; 
+        }
 
         .progress-container {
-            width: 90%; height: 6px; background: rgba(255,255,255,0.1);
-            border-radius: 10px; margin: 3px auto; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 95%; 
+            height: 5px; 
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px; 
+            margin: 2px auto; 
+            overflow: hidden; 
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .progress-bar { height: 100%; width: 0%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); transition: width 1s linear; }
+
+        .progress-bar { 
+            height: 100%; 
+            width: 0%; 
+            background: var(--neon-green); 
+            box-shadow: 0 0 10px var(--neon-green); 
+            transition: width 1s linear; 
+        }
+
         .last-minutes { animation: blinkDanger 0.8s infinite !important; }
 
-        .cell-content { display: flex; flex-direction: column; height: 100%; justify-content: center; position: relative; z-index: 2; }
-        .sub-in { font-size: 0.85rem; color: var(--neon-green); height: 40%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
-        .teach-in { font-size: 0.5rem; opacity: 0.7; height: 25%; background: transparent; border: none; text-align: center; color: white; outline: none; }
-        .rehat-col { background: rgba(255, 0, 85, 0.2) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.5rem; text-align: center; border: 1px solid var(--neon-pink) !important; width: 40px; }
+        .cell-content { 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            justify-content: center; 
+            position: relative; 
+            z-index: 2; 
+        }
+
+        .sub-in { 
+            font-size: 0.85rem; 
+            color: var(--neon-green); 
+            height: 40%; 
+            font-weight: 900; 
+            background: transparent; 
+            border: none; 
+            text-align: center; 
+            outline: none; 
+        }
+
+        .teach-in { 
+            font-size: 0.5rem; 
+            opacity: 0.7; 
+            height: 25%; 
+            background: transparent; 
+            border: none; 
+            text-align: center; 
+            color: white; 
+            outline: none; 
+        }
+
+        .rehat-col { 
+            background: rgba(255, 0, 85, 0.2) !important; 
+            color: var(--neon-pink); 
+            font-weight: 900; 
+            font-size: 1.4rem; 
+            text-align: center; 
+            border: 1px solid var(--neon-pink) !important; 
+            width: 35px; 
+        }
 
         /* WARNA SUBJEK */
         .color-BM { background: rgba(255, 0, 0, 0.3) !important; border-color: #ff0000 !important; }
@@ -133,14 +252,37 @@
         .color-PIQPM { background: linear-gradient(135deg, rgba(0, 200, 150, 0.3), rgba(255, 0, 234, 0.3)) !important; border-color: #00ffaa !important; }
         .color-PIUPM { background: linear-gradient(135deg, rgba(0, 255, 100, 0.3), rgba(255, 0, 234, 0.3)) !important; border-color: #00ff64 !important; }
 
-        .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .btn { padding: 8px 15px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; font-size: 0.75rem; }
-        .btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
+        .btn-row { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 5px; 
+            padding: 5px; 
+        }
+        
+        .btn { 
+            padding: 6px 12px; 
+            background: transparent; 
+            border: 2px solid var(--neon-blue); 
+            color: var(--neon-blue); 
+            border-radius: 8px; 
+            font-weight: bold; 
+            font-size: 0.7rem; 
+        }
         
         #alarmBanner {
-            position: fixed; top: -120px; left: 0; width: 100%; background: linear-gradient(90deg, #ff0055, #ff0000);
-            color: white; padding: 15px; text-align: center; font-weight: 900; z-index: 4000; transition: 0.6s;
-            font-size: 1.1rem; border-bottom: 3px solid white;
+            position: fixed; 
+            top: -120px; 
+            left: 0; 
+            width: 100%; 
+            background: linear-gradient(90deg, #ff0055, #ff0000);
+            color: white; 
+            padding: 12px; 
+            text-align: center; 
+            font-weight: 900; 
+            z-index: 4000; 
+            transition: 0.6s;
+            font-size: 1rem; 
+            border-bottom: 3px solid white;
         }
         #alarmBanner.active { top: 0; }
     </style>
@@ -379,3 +521,4 @@
     </script>
 </body>
 </html>
+
