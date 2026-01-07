@@ -10,20 +10,22 @@
             --neon-pink: #ff0055;
             --neon-green: #39ff14;
             --neon-yellow: #fff200;
+            --danger-red: #ff0000;
             --glass-bg: rgba(0, 0, 0, 0.85);
             --card-bg: rgba(10, 10, 15, 0.95);
-            --active-glow: rgba(57, 255, 20, 0.4);
         }
 
+        /* ANIMASI */
         @keyframes pulseGlow {
-            0% { box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green); }
-            50% { box-shadow: 0 0 20px var(--neon-green), inset 0 0 10px var(--neon-green); }
-            100% { box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green); }
+            0% { box-shadow: 0 0 5px var(--neon-green); }
+            50% { box-shadow: 0 0 20px var(--neon-green); }
+            100% { box-shadow: 0 0 5px var(--neon-green); }
         }
 
-        @keyframes scanning {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+        @keyframes blinkDanger {
+            0% { background: var(--danger-red); box-shadow: 0 0 5px var(--danger-red); opacity: 1; }
+            50% { background: #ff5555; box-shadow: 0 0 20px var(--danger-red); opacity: 0.5; }
+            100% { background: var(--danger-red); box-shadow: 0 0 5px var(--danger-red); opacity: 1; }
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
@@ -36,33 +38,30 @@
         }
 
         .header-box {
-            text-align: center; margin-top: 20px; margin-bottom: 15px;
-            background: var(--glass-bg); padding: 15px 40px; border-radius: 15px;
+            text-align: center; margin-top: 15px; margin-bottom: 10px;
+            background: var(--glass-bg); padding: 10px 40px; border-radius: 15px;
             border: 2px solid var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
         }
 
         .content-container {
             width: 98%; max-width: 1400px; flex-grow: 1;
             background: var(--card-bg); border-radius: 20px;
-            border: 1px solid rgba(0, 243, 255, 0.2); padding: 15px;
-            backdrop-filter: blur(15px); overflow-x: auto; margin-bottom: 20px;
+            border: 1px solid rgba(0, 243, 255, 0.2); padding: 10px;
+            backdrop-filter: blur(15px); overflow-x: auto; margin-bottom: 15px;
         }
 
         table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; min-width: 1100px; }
         th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.65rem; padding: 6px; border-radius: 5px; border: 1px solid var(--neon-blue); }
         td { background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; transition: 0.3s; overflow: hidden; }
         
-        /* HIGHLIGHT HARI SEMASA */
-        .active-row { 
-            background: rgba(0, 243, 255, 0.05) !important;
-            outline: 1px solid rgba(0, 243, 255, 0.3);
-        }
+        /* HIGHLIGHT HARI */
+        .active-row { background: rgba(0, 243, 255, 0.05) !important; }
         .active-row td:first-child { 
             background: var(--neon-blue) !important; color: black !important; font-weight: 900; 
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        /* EFEK AKTIF & PROGRESS BAR */
+        /* SLOT AKTIF & PROGRESS BAR */
         .active-period { 
             border: 3px solid var(--neon-green) !important; 
             animation: pulseGlow 2s infinite ease-in-out;
@@ -70,13 +69,18 @@
         }
 
         .progress-container {
-            width: 80%; height: 6px; background: rgba(255,255,255,0.1);
-            border-radius: 10px; margin: 4px auto 0; overflow: hidden;
-            border: 1px solid rgba(57, 255, 20, 0.3);
+            width: 90%; height: 8px; background: rgba(255,255,255,0.1);
+            border-radius: 10px; margin: 5px auto; overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .progress-bar {
             height: 100%; width: 0%; background: var(--neon-green);
             box-shadow: 0 0 10px var(--neon-green); transition: width 1s linear;
+        }
+
+        /* KESAN BERKELIP MINIT TERAKHIR */
+        .last-minutes {
+            animation: blinkDanger 0.8s infinite !important;
         }
 
         .cell-content { display: flex; flex-direction: column; height: 100%; justify-content: center; position: relative; z-index: 2; }
@@ -94,13 +98,12 @@
         .color-SJ, .color-SEJ { background: rgba(255,145,0,0.3) !important; border-color: #ff9100 !important; }
         .color-PJ, .color-PK, .color-PJK { background: rgba(149,255,0,0.2) !important; border-color: #95ff00 !important; }
         .color-PSV { background: rgba(255,0,115,0.25) !important; border-color: #ff0073 !important; }
-        .color-RBT { background: rgba(0,157,255,0.25) !important; border-color: #009dff !important; }
         .color-BA { background: rgba(162,0,255,0.3) !important; border-color: #a200ff !important; }
         .color-PIQPM { background: linear-gradient(135deg, rgba(0,200,150,0.3), rgba(255,0,234,0.3)) !important; border-color: #00ffaa !important; }
         .color-PIUPM { background: linear-gradient(135deg, rgba(0,255,100,0.3), rgba(255,0,234,0.3)) !important; border-color: #00ff64 !important; }
 
-        .btn-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn { padding: 10px 25px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; }
+        .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .btn { padding: 8px 20px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
         .btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
         .clock { position: fixed; top: 15px; right: 15px; color: var(--neon-blue); font-weight: 900; font-size: 1.4rem; background: rgba(0,0,0,0.8); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--neon-blue); z-index: 2000; }
         
@@ -119,8 +122,8 @@
     <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
     <div class="header-box">
-        <h1 id="mainTitle">JADUAL WAKTU 6 CEMERLANG</h1>
-        <h2 style="font-size:0.8rem; opacity:0.7;">HARI INI: <span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
+        <h1>JADUAL WAKTU 6 CEMERLANG</h1>
+        <h2 style="font-size:0.8rem; opacity:0.7;"><span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
     </div>
 
     <div class="content-container">
@@ -140,6 +143,7 @@
     <div class="btn-row">
         <button class="btn" onclick="saveToFirebase()">💾 SIMPAN</button>
         <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM</button>
+        <button class="btn" onclick="document.documentElement.requestFullscreen()">🖥️ SKRIN PENUH</button>
     </div>
 
     <script type="module">
@@ -219,24 +223,21 @@
         function runSystem() {
             const now = new Date();
             document.getElementById('liveClock').innerText = now.toLocaleTimeString('ms-MY', {hour12:false});
-            document.getElementById('todayDate').innerText = now.toLocaleDateString('ms-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('todayDate').innerText = now.toLocaleDateString('ms-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
             const currentMins = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; // 0=Isnin, 4=Jumaat
+            const currentDay = now.getDay() - 1;
 
-            // 1. Highlight Row Hari Semasa
             document.querySelectorAll('#ttBody tr').forEach((row, idx) => {
                 row.classList.toggle('active-row', idx === currentDay);
             });
 
-            // 2. Padam semua active state & progress bar lama
             document.querySelectorAll('.slot-cell').forEach(c => {
                 c.classList.remove('active-period');
                 const oldBar = c.querySelector('.progress-container');
                 if(oldBar) oldBar.remove();
             });
 
-            // 3. Cari slot aktif & Tambah Progress Bar
             slotStarts.forEach((start, idx) => {
                 const end = slotEnds[idx];
                 if (currentMins >= start && currentMins < end) {
@@ -245,39 +246,54 @@
                     
                     if (activeCell) {
                         activeCell.classList.add('active-period');
-                        
-                        // Kira peratusan masa berlalu
-                        const total = end - start;
-                        const elapsed = currentMins - start;
-                        const percent = (elapsed / total) * 100;
+                        const currentSub = activeCell.querySelector('.sub-in').value;
 
-                        // Cipta progress bar jika belum ada
+                        // SMART LOGIC: Deteksi subjek berkembar
+                        let actualStart = start;
+                        let actualEnd = end;
+
+                        // Cek slot sebelum (jika sama, masa mula ditarik ke belakang)
+                        const prevVisual = (idx - 1) >= 5 ? (idx - 1) + 1 : (idx - 1);
+                        const prevCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${prevVisual}"]`);
+                        if(prevCell && prevCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") {
+                            actualStart = slotStarts[idx-1];
+                        }
+
+                        // Cek slot selepas (jika sama, masa tamat ditarik ke depan)
+                        const nextVisual = (idx + 1) >= 5 ? (idx + 1) + 1 : (idx + 1);
+                        const nextCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${nextVisual}"]`);
+                        if(nextCell && nextCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") {
+                            actualEnd = slotEnds[idx+1];
+                        }
+
+                        const total = actualEnd - actualStart;
+                        const elapsed = currentMins - actualStart;
+                        const percent = (elapsed / total) * 100;
+                        const timeLeft = actualEnd - currentMins;
+
                         let pContainer = document.createElement('div');
                         pContainer.className = 'progress-container';
-                        pContainer.innerHTML = `<div class="progress-bar" style="width:${percent}%"></div>`;
+                        // Tambah class 'last-minutes' jika baki masa <= 5 minit
+                        const blinkClass = (timeLeft <= 5) ? 'last-minutes' : '';
+                        pContainer.innerHTML = `<div class="progress-bar ${blinkClass}" style="width:${percent}%"></div>`;
                         activeCell.querySelector('.cell-content').appendChild(pContainer);
+
+                        // Alarm & Banner
+                        const banner = document.getElementById('alarmBanner');
+                        if(timeLeft <= 5 && currentSub !== "-") {
+                            banner.innerText = `⚠️ ${currentSub} TAMAT DALAM ${timeLeft} MINIT!`;
+                            banner.classList.add('active');
+                            if(!alarmTriggered) {
+                                document.getElementById('alarmSound').play().catch(() => {});
+                                alarmTriggered = true;
+                            }
+                        } else {
+                            banner.classList.remove('active');
+                            alarmTriggered = false;
+                        }
                     }
                 }
             });
-
-            // 4. Sistem Alarm
-            if (currentDay >= 0 && currentDay <= 4) {
-                slotEnds.forEach((end, idx) => {
-                    const diff = end - currentMins;
-                    if (diff > 0 && diff <= 5) {
-                        const banner = document.getElementById('alarmBanner');
-                        banner.innerText = `⚠️ SUBJEK AKAN TAMAT DALAM ${diff} MINIT!`;
-                        banner.classList.add('active');
-                        if (!alarmTriggered) {
-                            document.getElementById('alarmSound').play().catch(() => {});
-                            alarmTriggered = true;
-                        }
-                    } else if (diff <= 0) {
-                        document.getElementById('alarmBanner').classList.remove('active');
-                        alarmTriggered = false;
-                    }
-                });
-            }
         }
 
         window.saveToFirebase = () => {
