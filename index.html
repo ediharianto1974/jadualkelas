@@ -39,21 +39,29 @@
 
         .header-box {
             text-align: center; margin-top: 15px; margin-bottom: 10px;
-            background: var(--glass-bg); padding: 15px 40px; border-radius: 15px;
+            background: var(--glass-bg); padding: 15px 30px; border-radius: 15px;
             border: 2px solid var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            width: 95%; max-width: 1200px;
         }
 
-        /* GURU KELAS STYLING */
+        /* GURU KELAS STYLING - LEBIH PANJANG */
         .teacher-container {
-            display: flex; gap: 15px; justify-content: center; margin-top: 10px;
+            display: flex; gap: 20px; justify-content: center; margin-top: 12px; flex-wrap: wrap;
         }
         .teacher-badge {
-            background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-blue);
-            padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; display: flex; align-items: center; gap: 8px;
+            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.5);
+            padding: 8px 20px; border-radius: 30px; font-size: 0.75rem; display: flex; align-items: center; gap: 12px;
+            transition: 0.3s;
         }
-        .teacher-in {
+        .teacher-badge:focus-within {
+            border-color: var(--neon-blue); background: rgba(0, 243, 255, 0.15); box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        .teacher-label { color: var(--neon-blue); font-weight: 900; letter-spacing: 1px; }
+        .teacher-input-field {
             background: transparent; border: none; color: var(--neon-yellow);
-            font-weight: bold; width: 150px; outline: none; text-align: left;
+            font-weight: bold; width: 300px; /* RUANGAN DIPANJANGKAN */
+            outline: none; text-align: left; font-size: 0.85rem;
+            letter-spacing: 0.5px;
         }
 
         .content-container {
@@ -91,7 +99,6 @@
         .color-MT { background: rgba(255,242,0,0.2) !important; border-color: #fff200 !important; }
         .color-SN { background: rgba(0,255,30,0.2) !important; border-color: #00ff1e !important; }
         .color-PAI { background: rgba(0,234,255,0.2) !important; border-color: #00eaff !important; }
-        .color-SJ, .color-SEJ { background: rgba(255,145,0,0.3) !important; border-color: #ff9100 !important; }
 
         .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
         .btn { padding: 8px 20px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
@@ -116,15 +123,15 @@
         <h1>JADUAL WAKTU 6 CEMERLANG</h1>
         <div class="teacher-container">
             <div class="teacher-badge">
-                <span style="color:var(--neon-blue)">GURU 1:</span>
-                <input type="text" id="teacher1" class="teacher-in" placeholder="NAMA GURU 1">
+                <span class="teacher-label">GURU KELAS 1:</span>
+                <input type="text" id="teacher1" class="teacher-input-field" placeholder="MASUKKAN NAMA PENUH">
             </div>
             <div class="teacher-badge">
-                <span style="color:var(--neon-blue)">GURU 2:</span>
-                <input type="text" id="teacher2" class="teacher-in" placeholder="NAMA GURU 2">
+                <span class="teacher-label">GURU KELAS 2:</span>
+                <input type="text" id="teacher2" class="teacher-input-field" placeholder="MASUKKAN NAMA PENUH">
             </div>
         </div>
-        <h2 style="font-size:0.8rem; opacity:0.7; margin-top:10px;"><span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
+        <h2 style="font-size:0.8rem; opacity:0.7; margin-top:12px;"><span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
     </div>
 
     <div class="content-container">
@@ -142,8 +149,8 @@
     </div>
 
     <div class="btn-row">
-        <button class="btn" onclick="saveToFirebase()">💾 SIMPAN</button>
-        <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM</button>
+        <button class="btn" onclick="saveToFirebase()">💾 SIMPAN SEMUA</button>
+        <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM DATA</button>
         <button class="btn" onclick="document.documentElement.requestFullscreen()">🖥️ SKRIN PENUH</button>
     </div>
 
@@ -200,7 +207,6 @@
                 const d = snapshot.val();
                 if (!d) return;
                 
-                // Load Teacher Names
                 if(d.t1) document.getElementById('teacher1').value = d.t1;
                 if(d.t2) document.getElementById('teacher2').value = d.t2;
 
@@ -244,52 +250,54 @@
                 if(oldBar) oldBar.remove();
             });
 
-            slotStarts.forEach((start, idx) => {
-                const end = slotEnds[idx];
-                if (currentMins >= start && currentMins < end) {
-                    const visualSlot = idx >= 5 ? idx + 1 : idx;
-                    const activeCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${visualSlot}"]`);
-                    
-                    if (activeCell) {
-                        activeCell.classList.add('active-period');
-                        const currentSub = activeCell.querySelector('.sub-in').value;
-                        let actualStart = start;
-                        let actualEnd = end;
+            if(currentDay >= 0 && currentDay <= 4) {
+                slotStarts.forEach((start, idx) => {
+                    const end = slotEnds[idx];
+                    if (currentMins >= start && currentMins < end) {
+                        const visualSlot = idx >= 5 ? idx + 1 : idx;
+                        const activeCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${visualSlot}"]`);
+                        
+                        if (activeCell) {
+                            activeCell.classList.add('active-period');
+                            const currentSub = activeCell.querySelector('.sub-in').value;
+                            let actualStart = start;
+                            let actualEnd = end;
 
-                        const prevVisual = (idx - 1) >= 5 ? (idx - 1) + 1 : (idx - 1);
-                        const prevCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${prevVisual}"]`);
-                        if(prevCell && prevCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualStart = slotStarts[idx-1];
+                            const prevVisual = (idx - 1) >= 5 ? (idx - 1) + 1 : (idx - 1);
+                            const prevCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${prevVisual}"]`);
+                            if(prevCell && prevCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualStart = slotStarts[idx-1];
 
-                        const nextVisual = (idx + 1) >= 5 ? (idx + 1) + 1 : (idx + 1);
-                        const nextCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${nextVisual}"]`);
-                        if(nextCell && nextCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualEnd = slotEnds[idx+1];
+                            const nextVisual = (idx + 1) >= 5 ? (idx + 1) + 1 : (idx + 1);
+                            const nextCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${nextVisual}"]`);
+                            if(nextCell && nextCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualEnd = slotEnds[idx+1];
 
-                        const total = actualEnd - actualStart;
-                        const elapsed = currentMins - actualStart;
-                        const percent = (elapsed / total) * 100;
-                        const timeLeft = actualEnd - currentMins;
+                            const total = actualEnd - actualStart;
+                            const elapsed = currentMins - actualStart;
+                            const percent = (elapsed / total) * 100;
+                            const timeLeft = actualEnd - currentMins;
 
-                        let pContainer = document.createElement('div');
-                        pContainer.className = 'progress-container';
-                        const blinkClass = (timeLeft <= 5) ? 'last-minutes' : '';
-                        pContainer.innerHTML = `<div class="progress-bar ${blinkClass}" style="width:${percent}%"></div>`;
-                        activeCell.querySelector('.cell-content').appendChild(pContainer);
+                            let pContainer = document.createElement('div');
+                            pContainer.className = 'progress-container';
+                            const blinkClass = (timeLeft <= 5) ? 'last-minutes' : '';
+                            pContainer.innerHTML = `<div class="progress-bar ${blinkClass}" style="width:${percent}%"></div>`;
+                            activeCell.querySelector('.cell-content').appendChild(pContainer);
 
-                        const banner = document.getElementById('alarmBanner');
-                        if(timeLeft <= 5 && currentSub !== "-") {
-                            banner.innerText = `⚠️ ${currentSub} TAMAT DALAM ${timeLeft} MINIT!`;
-                            banner.classList.add('active');
-                            if(!alarmTriggered) {
-                                document.getElementById('alarmSound').play().catch(() => {});
-                                alarmTriggered = true;
+                            const banner = document.getElementById('alarmBanner');
+                            if(timeLeft <= 5 && currentSub !== "-") {
+                                banner.innerText = `⚠️ ${currentSub} TAMAT DALAM ${timeLeft} MINIT!`;
+                                banner.classList.add('active');
+                                if(!alarmTriggered) {
+                                    document.getElementById('alarmSound').play().catch(() => {});
+                                    alarmTriggered = true;
+                                }
+                            } else {
+                                banner.classList.remove('active');
+                                alarmTriggered = false;
                             }
-                        } else {
-                            banner.classList.remove('active');
-                            alarmTriggered = false;
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         window.saveToFirebase = () => {
@@ -299,12 +307,12 @@
                 t1: document.getElementById('teacher1').value,
                 t2: document.getElementById('teacher2').value
             };
-            set(dbRef, data).then(() => alert("✅ JADUAL & NAMA GURU DISIMPAN!"));
+            set(dbRef, data).then(() => alert("✅ JADUAL & NAMA GURU TELAH DISIMPAN!"));
         };
 
         window.resetFirebase = () => {
             if (prompt("KOD PADAM:") !== AUTH_KOD) return alert("KOD SALAH!");
-            if(confirm("PADAM SEMUA?")) remove(dbRef).then(() => location.reload());
+            if(confirm("ANDA PASTI UNTUK PADAM SEMUA DATA?")) remove(dbRef).then(() => location.reload());
         }
 
         init();
