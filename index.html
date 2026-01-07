@@ -37,42 +37,61 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* HEADER BOX - JAM DI DALAM */
+        /* HEADER BOX - STRUKTUR BARU */
         .header-box {
-            text-align: center; margin-top: 15px; margin-bottom: 10px;
-            background: var(--glass-bg); padding: 20px 30px; border-radius: 15px;
+            margin-top: 15px; margin-bottom: 10px;
+            background: var(--glass-bg); padding: 15px 30px; border-radius: 15px;
             border: 2px solid var(--neon-blue); box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
-            width: 95%; max-width: 1200px;
-            display: flex; flex-direction: column; align-items: center;
+            width: 95%; max-width: 1300px;
         }
 
-        /* GAYA JAM BARU (DI DALAM HEADER) */
+        /* Container untuk baris tajuk & jam */
+        .title-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr; /* Membahagi kepada 3 bahagian */
+            align-items: center;
+            width: 100%;
+        }
+
+        .title-row h1 {
+            grid-column: 2; /* Tajuk sentiasa di tengah (kolum 2) */
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        /* JAM - SEBARIS DI KANAN */
         .clock {
-            color: var(--neon-blue); font-weight: 900; font-size: 2.5rem; 
-            background: rgba(0,0,0,0.4); padding: 5px 30px; border-radius: 12px;
-            border: 1px solid var(--neon-blue); margin-bottom: 15px;
+            grid-column: 3; /* Jam di kolum 3 (kanan) */
+            justify-self: end;
+            color: var(--neon-blue); font-weight: 900; font-size: 1.8rem; 
+            background: rgba(0,0,0,0.5); padding: 5px 20px; border-radius: 10px;
+            border: 1px solid var(--neon-blue);
             text-shadow: 0 0 10px var(--neon-blue);
-            letter-spacing: 3px;
+            letter-spacing: 2px;
+            min-width: 160px;
+            text-align: center;
         }
 
+        /* GURU KELAS SECTION */
         .teacher-container {
-            display: flex; gap: 20px; justify-content: center; margin-top: 12px; flex-wrap: wrap;
+            display: flex; gap: 15px; justify-content: center; margin-top: 15px; flex-wrap: wrap;
         }
         .teacher-badge {
             background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.5);
-            padding: 8px 20px; border-radius: 30px; font-size: 0.75rem; display: flex; align-items: center; gap: 12px;
+            padding: 6px 15px; border-radius: 30px; font-size: 0.7rem; display: flex; align-items: center; gap: 10px;
         }
         .teacher-label { color: var(--neon-blue); font-weight: 900; }
         .teacher-input-field {
             background: transparent; border: none; color: var(--neon-yellow);
-            font-weight: bold; width: 300px; outline: none; text-align: left; font-size: 0.85rem;
+            font-weight: bold; width: 280px; outline: none; text-align: left; font-size: 0.8rem;
         }
 
         .content-container {
             width: 98%; max-width: 1400px; flex-grow: 1;
             background: var(--card-bg); border-radius: 20px;
             border: 1px solid rgba(0, 243, 255, 0.2); padding: 10px;
-            backdrop-filter: blur(15px); overflow-x: auto; margin-bottom: 15px;
+            backdrop-filter: blur(15px); overflow-x: auto; margin-bottom: 10px;
         }
 
         table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; min-width: 1100px; }
@@ -86,57 +105,41 @@
         .active-period { border: 3px solid var(--neon-green) !important; animation: pulseGlow 2s infinite ease-in-out; z-index: 10; }
 
         .progress-container {
-            width: 90%; height: 8px; background: rgba(255,255,255,0.1);
-            border-radius: 10px; margin: 5px auto; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 90%; height: 6px; background: rgba(255,255,255,0.1);
+            border-radius: 10px; margin: 3px auto; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .progress-bar { height: 100%; width: 0%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); transition: width 1s linear; }
         .last-minutes { animation: blinkDanger 0.8s infinite !important; }
 
         .cell-content { display: flex; flex-direction: column; height: 100%; justify-content: center; position: relative; z-index: 2; }
-        .sub-in { font-size: 0.9rem; color: var(--neon-green); height: 40%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
-        .teach-in { font-size: 0.55rem; opacity: 0.7; height: 25%; background: transparent; border: none; text-align: center; color: white; outline: none; }
+        .sub-in { font-size: 0.85rem; color: var(--neon-green); height: 40%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
+        .teach-in { font-size: 0.5rem; opacity: 0.7; height: 25%; background: transparent; border: none; text-align: center; color: white; outline: none; }
         .rehat-col { background: rgba(255, 0, 85, 0.2) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.5rem; text-align: center; border: 1px solid var(--neon-pink) !important; width: 40px; }
 
-/* --- KATEGORI WARNA SUBJEK --- */
-        
-        /* Teras (BM, BI, MT, SN) */
+        /* --- KATEGORI WARNA SUBJEK --- */
         .color-BM { background: rgba(255, 0, 0, 0.3) !important; border-color: #ff0000 !important; }
         .color-BI { background: rgba(0, 81, 255, 0.3) !important; border-color: #0051ff !important; }
         .color-MT { background: rgba(255, 242, 0, 0.2) !important; border-color: #fff200 !important; }
         .color-SN { background: rgba(0, 255, 30, 0.2) !important; border-color: #00ff1e !important; }
-
-        /* Agama & Moral */
         .color-PAI { background: rgba(0, 234, 255, 0.2) !important; border-color: #00eaff !important; }
         .color-PM { background: rgba(255, 0, 234, 0.2) !important; border-color: #ff00ea !important; }
         .color-BA { background: rgba(162, 0, 255, 0.3) !important; border-color: #a200ff !important; }
-
-        /* Kemanusiaan & Seni */
         .color-SJ, .color-SEJ { background: rgba(255, 145, 0, 0.3) !important; border-color: #ff9100 !important; }
         .color-PSV { background: rgba(255, 0, 115, 0.25) !important; border-color: #ff0073 !important; }
         .color-MZ { background: rgba(200, 0, 255, 0.2) !important; border-color: #c800ff !important; }
         .color-RBT { background: rgba(139, 69, 19, 0.3) !important; border-color: #8b4513 !important; }
-
-        /* Sukan & Kesihatan */
         .color-PJ, .color-PK, .color-PJK { background: rgba(149, 255, 0, 0.2) !important; border-color: #95ff00 !important; }
-
-        /* Subjek Gabungan (Gradient Neon) */
-        .color-PIQPM { 
-            background: linear-gradient(135deg, rgba(0, 200, 150, 0.3), rgba(255, 0, 234, 0.3)) !important; 
-            border-color: #00ffaa !important; 
-        }
-        .color-PIUPM { 
-            background: linear-gradient(135deg, rgba(0, 255, 100, 0.3), rgba(255, 0, 234, 0.3)) !important; 
-            border-color: #00ff64 !important; 
-        }
+        .color-PIQPM { background: linear-gradient(135deg, rgba(0, 200, 150, 0.3), rgba(255, 0, 234, 0.3)) !important; border-color: #00ffaa !important; }
+        .color-PIUPM { background: linear-gradient(135deg, rgba(0, 255, 100, 0.3), rgba(255, 0, 234, 0.3)) !important; border-color: #00ff64 !important; }
 
         .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .btn { padding: 8px 20px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; font-size: 0.8rem; }
+        .btn { padding: 8px 15px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; font-size: 0.75rem; }
         .btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
         
         #alarmBanner {
             position: fixed; top: -120px; left: 0; width: 100%; background: linear-gradient(90deg, #ff0055, #ff0000);
-            color: white; padding: 20px; text-align: center; font-weight: 900; z-index: 4000; transition: 0.6s;
-            font-size: 1.2rem; border-bottom: 3px solid white;
+            color: white; padding: 15px; text-align: center; font-weight: 900; z-index: 4000; transition: 0.6s;
+            font-size: 1.1rem; border-bottom: 3px solid white;
         }
         #alarmBanner.active { top: 0; }
     </style>
@@ -147,30 +150,34 @@
     <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
     <div class="header-box">
-        <div class="clock" id="liveClock">00:00:00</div>
-        
-        <h1>JADUAL WAKTU 6 CEMERLANG</h1>
+        <div class="title-row">
+            <div></div> <h1>JADUAL WAKTU 6 CEMERLANG</h1>
+            <div id="liveClock" class="clock">00:00:00</div>
+        </div>
         
         <div class="teacher-container">
             <div class="teacher-badge">
                 <span class="teacher-label">GURU KELAS 1:</span>
-                <input type="text" id="teacher1" class="teacher-input-field" placeholder="NAMA PENUH">
+                <input type="text" id="teacher1" class="teacher-input-field" placeholder="NAMA GURU 1">
             </div>
             <div class="teacher-badge">
                 <span class="teacher-label">GURU KELAS 2:</span>
-                <input type="text" id="teacher2" class="teacher-input-field" placeholder="NAMA PENUH">
+                <input type="text" id="teacher2" class="teacher-input-field" placeholder="NAMA GURU 2">
             </div>
         </div>
-        <h2 style="font-size:0.8rem; opacity:0.7; margin-top:12px;"><span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
+        
+        <h2 style="font-size:0.75rem; opacity:0.8; margin-top:10px; text-align:center;">
+            <span id="todayDate" style="color:var(--neon-yellow);"></span>
+        </h2>
     </div>
 
     <div class="content-container">
         <table id="ttTable">
             <thead>
                 <tr>
-                    <th style="width: 100px;">HARI</th>
+                    <th style="width: 80px;">HARI</th>
                     <th>07:10-07:40</th><th>07:40-08:10</th><th>08:10-08:40</th><th>08:40-09:10</th><th>09:10-09:40</th>
-                    <th style="width: 45px;">REHAT</th>
+                    <th style="width: 40px;">REHAT</th>
                     <th>10:00-10:30</th><th>10:30-11:00</th><th>11:00-11:30</th><th>11:30-12:00</th><th>12:00-12:30</th><th>12:30-01:00</th>
                 </tr>
             </thead>
@@ -216,7 +223,7 @@
             tt.innerHTML = ""; 
             hariArr.forEach((h, i) => {
                 let rTT = `<tr id="row-${i}">
-                    <td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.8rem;">${h}</td>`;
+                    <td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.75rem;">${h}</td>`;
                 for(let j=0; j<12; j++) {
                     if(j === 5) {
                         rTT += `<td class="rehat-col">${rehatTxt[i]}</td>`;
@@ -335,16 +342,15 @@
                 t1: document.getElementById('teacher1').value,
                 t2: document.getElementById('teacher2').value
             };
-            set(dbRef, data).then(() => alert("✅ JADUAL & NAMA GURU TELAH DISIMPAN!"));
+            set(dbRef, data).then(() => alert("✅ DISIMPAN!"));
         };
 
         window.resetFirebase = () => {
             if (prompt("KOD PADAM:") !== AUTH_KOD) return alert("KOD SALAH!");
-            if(confirm("ANDA PASTI UNTUK PADAM SEMUA DATA?")) remove(dbRef).then(() => location.reload());
+            if(confirm("PADAM SEMUA?")) remove(dbRef).then(() => location.reload());
         }
 
         init();
     </script>
 </body>
 </html>
-
