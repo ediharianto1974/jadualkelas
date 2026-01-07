@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pengurusan Kelas 6C - SKAG</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff0055;
+            --neon-green: #39ff14;
+            --neon-yellow: #fff200;
+            --glass-bg: rgba(0, 0, 0, 0.85);
+            --card-bg: rgba(10, 10, 15, 0.95);
+            --active-glow: rgba(57, 255, 20, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: url('space.gif') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #050505;
+            color: white;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        /* Navigasi */
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            width: 50px;
+            height: 100px;
+            cursor: pointer;
+            z-index: 3000;
+            border-radius: 12px;
+            font-size: 1.8rem;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .nav-btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 25px var(--neon-blue); }
+        .nav-left { left: 15px; }
+        .nav-right { right: 15px; }
+
+        .viewport {
+            display: flex;
+            width: 300vw;
+            height: 100vh;
+            transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            padding: 15px 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Style */
+        .header-box {
+            text-align: center;
+            margin-bottom: 15px;
+            background: var(--glass-bg);
+            padding: 15px 40px;
+            border-radius: 15px;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            width: fit-content;
+        }
+        .header-box h1 { font-size: 1.5rem; color: var(--neon-blue); letter-spacing: 2px; }
+        .header-box h2 { font-size: 0.85rem; margin-top: 5px; opacity: 0.8; }
+
+        .content-container {
+            width: 100%;
+            flex-grow: 1;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            padding: 25px;
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+        }
+
+        /* Slide 1: Struktur */
+        .struct-wrapper { max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+        .struct-group { display: grid; grid-template-columns: 140px 1fr; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.03); padding: 8px 15px; border-radius: 8px; border-left: 3px solid var(--neon-blue); }
+        .struct-label { color: var(--neon-blue); font-size: 0.75rem; font-weight: 800; white-space: nowrap; }
+        .input-line { background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(0,243,255,0.3) !important; border-radius: 5px; color: var(--neon-green) !important; padding: 6px 12px; font-size: clamp(0.7rem, 1.5vw, 0.95rem); width: 100%; outline: none; }
+        .guru-box { display: flex; gap: 10px; align-items: center; width: 100%; }
+        .ajk-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%;}
+
+        /* Slide 2: Jadual Waktu */
+        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; }
+        th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.7rem; padding: 6px; border-radius: 5px; border: 1px solid var(--neon-blue); }
+        td { background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; transition: 0.3s; }
+        
+        /* Auto-Highlight Active Slot */
+        .active-period { 
+            border: 2px solid var(--neon-green) !important; 
+            background: var(--active-glow) !important;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        .cell-content { display: flex; flex-direction: column; height: 100%; justify-content: center; }
+        .sub-in { font-size: 0.95rem; color: var(--neon-green); height: 55%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
+        .teach-in { font-size: 0.6rem; opacity: 0.7; height: 35%; background: transparent; border: none; text-align: center; color: white; outline: none; }
+        .rehat-col { background: rgba(255, 0, 85, 0.2) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.8rem; text-align: center; border: 1px solid var(--neon-pink) !important; }
+
+        /* Slide 3: Kad Bertugas Neon */
+        .duty-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; height: 100%; }
+        .duty-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(0, 243, 255, 0.2); 
+            border-radius: 15px; 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .duty-card:hover { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
+        .duty-day-title { color: var(--neon-blue); font-weight: 900; text-align: center; border-bottom: 1px solid var(--neon-blue); padding-bottom: 5px; font-size: 1rem; }
+        .duty-task { display: flex; flex-direction: column; gap: 3px; }
+        .task-label { font-size: 0.85rem; color: var(--neon-yellow); font-weight: bold; }
+        .dt-in { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 5px; padding: 5px; font-size: 0.75rem; width: 100%; text-align: center; outline: none; resize: none; }
+
+.emoji-large {
+    font-size: 1.8rem; /* Saiz ikon lebih besar dari teks */
+    vertical-align: middle;
+    margin-right: 5px;
+    filter: drop-shadow(0 0 5px var(--neon-yellow));
+}
+
+/* Animasi Denyutan (Pulse) */
+@keyframes pulse-live {
+    0% { transform: scale(1); box-shadow: 0 0 5px var(--neon-green); border-color: var(--neon-green); }
+    50% { transform: scale(1.02); box-shadow: 0 0 20px var(--neon-green); border-color: #fff; }
+    100% { transform: scale(1); box-shadow: 0 0 5px var(--neon-green); border-color: var(--neon-green); }
+}
+
+.live-now {
+    animation: pulse-live 1.5s infinite ease-in-out;
+    background: rgba(57, 255, 20, 0.2) !important;
+    border: 2px solid var(--neon-green) !important;
+    z-index: 10;
+}
+
+        /* Kod Warna Subjek (DIPERBAIKI) */
+        .color-BM { background: rgba(255,0,0,0.3) !important; border-color: red !important; }
+        .color-BI { background: rgba(0,81,255,0.3) !important; border-color: #0051ff !important; }
+        .color-MT { background: rgba(255,242,0,0.2) !important; border-color: #fff200 !important; }
+        .color-SN { background: rgba(0,255,30,0.2) !important; border-color: #00ff1e !important; }
+        .color-PAI { background: rgba(0,234,255,0.2) !important; border-color: #00eaff !important; }
+        .color-PM { background: rgba(255,0,234,0.2) !important; border-color: #ff00ea !important; }
+        .color-SJ, .color-SEJ { background: rgba(255,145,0,0.3) !important; border-color: #ff9100 !important; }
+        .color-PJ, .color-PK, .color-PJK { background: rgba(149,255,0,0.2) !important; border-color: #95ff00 !important; }
+        .color-PER { background: rgba(150,150,150,0.4) !important; border-color: #fff !important; }
+        .color-BA { background: rgba(162,0,255,0.3) !important; border-color: #a200ff !important; } /* Ungu */
+        .color-TAS { background: rgba(0,255,170,0.25) !important; border-color: #00ffaa !important; } /* Hijau Mint */
+        .color-MZ { background: rgba(255,217,0,0.25) !important; border-color: #ffd900 !important; } /* Emas */
+        .color-PSV { background: rgba(255,0,115,0.25) !important; border-color: #ff0073 !important; } /* Pink */
+        .color-RBT { background: rgba(0,157,255,0.25) !important; border-color: #009dff !important; } /* Biru */
+        .color-PIU { background: rgba(0,255,100,0.3) !important; border-color: #00ff64 !important; } /* Hijau Terang */
+        .color-PIQ { background: rgba(0,200,150,0.3) !important; border-color: #00c896 !important; } /* Hijau Turquoise */
+
+        /* UI Elements */
+        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn { padding: 10px 25px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
+        .clock { position: fixed; top: 15px; right: 15px; color: var(--neon-blue); font-weight: 900; font-size: 1.4rem; background: rgba(0,0,0,0.8); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--neon-blue); z-index: 2000; }
+        
+        #alarmBanner {
+            position: fixed; top: -120px; left: 0; width: 100%;
+            background: linear-gradient(90deg, #ff0055, #ff0000);
+            color: white; padding: 20px; text-align: center;
+            font-weight: 900; z-index: 4000; transition: 0.6s;
+            font-size: 1.2rem; border-bottom: 3px solid white;
+            box-shadow: 0 5px 30px rgba(255,0,0,0.5);
+        }
+        #alarmBanner.active { top: 0; }
+    </style>
+</head>
+<body>
+
+    <div id="alarmBanner">INFO: MEMULAKAN SISTEM...</div>
+    <div class="clock" id="liveClock">00:00:00</div>
+    <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+    <button class="nav-btn nav-left" onclick="changeSlide(-1)">❮</button>
+    <button class="nav-btn nav-right" onclick="changeSlide(1)">❯</button>
+
+    <div class="viewport" id="mainViewport">
+        
+        <div class="slide">
+            <div class="header-box"><h1>STRUKTUR ORGANISASI KELAS 6 CEMERLANG</h1></div>
+            <div class="content-container">
+                <div class="struct-wrapper">
+                    <div class="struct-group">
+                        <label class="struct-label">GURU KELAS</label>
+                        <div class="guru-box">
+                            <input type="text" class="input-line st-in" placeholder="GURU 1">
+                            <span style="opacity: 0.5;">&</span>
+                            <input type="text" class="input-line st-in" placeholder="GURU 2">
+                        </div>
+                    </div>
+                    <div class="struct-group">
+                        <label class="struct-label">KETUA KELAS</label>
+                        <input type="text" class="input-line st-in" placeholder="NAMA KETUA">
+                    </div>
+                    <div class="struct-group">
+                        <label class="struct-label">PENOLONG KETUA</label>
+                        <input type="text" class="input-line st-in" placeholder="NAMA PENOLONG">
+                    </div>
+                    <div class="struct-group">
+                        <label class="struct-label">SETIAUSAHA</label>
+                        <input type="text" class="input-line st-in" placeholder="NAMA SETIAUSAHA">
+                    </div>
+                    <div class="struct-group">
+                        <label class="struct-label">BENDAHARI</label>
+                        <input type="text" class="input-line st-in" placeholder="NAMA BENDAHARI">
+                    </div>
+                    <div class="struct-group" style="display: block;">
+                        <label class="struct-label" style="display: block; margin-bottom: 10px; text-align: center;">AJK KELAS (KEBERSIHAN / KECERIAAN / KESELAMATAN)</label>
+                        <div class="ajk-grid">
+                            <input type="text" class="input-line st-in" placeholder="AJK 1">
+                            <input type="text" class="input-line st-in" placeholder="AJK 2">
+                            <input type="text" class="input-line st-in" placeholder="AJK 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-row"><button class="btn" onclick="saveToFirebase()">💾 SIMPAN KE AWAN</button></div>
+        </div>
+
+        <div class="slide">
+            <div class="header-box">
+                <h1>JADUAL WAKTU KELAS 6 CEMERLANG</h1>
+                <h2>SESI <input type="text" id="yearVal" maxlength="4" style="width:50px; background:transparent; border:none; color:var(--neon-pink); font-weight:bold;" value="2026"></h2>
+            </div>
+            <div class="content-container">
+                <table id="ttTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">HARI</th>
+                            <th>07:10-07:40</th><th>07:40-08:10</th><th>08:10-08:40</th><th>08:40-09:10</th><th>09:10-09:40</th>
+                            <th style="width: 40px;">R<br>E<br>H<br>A<br>T</th>
+                            <th>10:00-10:30</th><th>10:30-11:00</th><th>11:00-11:30</th><th>11:30-12:00</th><th>12:00-12:30</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ttBody"></tbody>
+                </table>
+            </div>
+            <div class="btn-row">
+                <button class="btn" onclick="saveToFirebase()">💾 SIMPAN JADUAL</button>
+                <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM SEMUA</button>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="header-box">
+                <h1>JADUAL BERTUGAS HARIAN 6 CEMERLANG</h1>
+                <h2>KEBERSIHAN & KECERIAAN</h2>
+            </div>
+            <div class="content-container">
+                <div class="duty-grid" id="dutyContainer"></div>
+            </div>
+            <div class="btn-row"><button class="btn" onclick="saveToFirebase()">💾 SIMPAN BERTUGAS</button></div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase Config (Dikekalkan)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBtA37bRurRoe7kCTUX_aIQHNv0cjWG09A",
+            authDomain: "jadualkelas-896ae.firebaseapp.com",
+	    databaseURL: "https://jadualkelas-896ae-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "jadualkelas-896ae",
+            storageBucket: "jadualkelas-896ae.firebasestorage.app",
+            messagingSenderId: "164261211870",
+            appId: "1:164261211870:web:03eb60e7276601953c1c4f",
+            measurementId: "G-QLP6G40QMM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db, 'jadual_6c');
+
+        const hariArr = ['ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT'];
+        const rehatTxt = ['R', 'E', 'H', 'A', 'T'];
+        
+        // SENARAI SUBJEK DIKEMASKINI (Tambah BA, TAS, PIU, PIQ)
+        const subjekList = ['BM','BI','MT','SN','PAI','PM','SJ','SEJ','PJ','PK','PJK','PSV','MZ','RBT','IBAN','TAS','TASM','NILAM','PER','BA','PIU','PIQ'];
+        
+        const slotEnds = [460, 490, 520, 550, 580, 630, 660, 690, 720, 750]; 
+        const AUTH_KOD = "jadualwaktu";
+        let activeSlide = 1;
+        let alarmTriggered = false;
+
+        // --- INIT UI ---
+        window.changeSlide = (n) => {
+            activeSlide = Math.max(0, Math.min(2, activeSlide + n));
+            document.getElementById('mainViewport').style.transform = `translateX(-${activeSlide * 100}vw)`;
+        };
+
+        function init() {
+            const tt = document.getElementById('ttBody');
+            const dc = document.getElementById('dutyContainer');
+
+            hariArr.forEach((h, i) => {
+                let rTT = `<tr><td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.7rem;">${h}</td>`;
+                for(let j=0; j<11; j++) {
+                    if(j === 5) {
+                        rTT += `<td class="rehat-col">${rehatTxt[i]}</td>`;
+                    } else {
+                        rTT += `<td class="slot-cell" data-day="${i}" data-slot="${j}">
+                            <div class="cell-content">
+                                <input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">
+                                <input type="text" class="teach-in tt-in" placeholder="GURU">
+                            </div>
+                        </td>`;
+                    }
+                }
+                rTT += `</tr>`;
+                tt.innerHTML += rTT;
+
+                dc.innerHTML += `
+    <div class="duty-card">
+        <div class="duty-day-title">${h}</div>
+        <div class="duty-task">
+            <label class="task-label"><span class="emoji-large">🧹</span> MENYAPU</label>
+            <textarea class="dt-in" placeholder="NAMA"></textarea>
+        </div>
+        <div class="duty-task">
+            <label class="task-label"><span class="emoji-large">🪑</span>  KERUSI & MEJA</label>
+            <textarea class="dt-in" placeholder="NAMA"></textarea>
+        </div>
+        <div class="duty-task">
+            <label class="task-label"><span class="emoji-large">🗑️</span> SAMPAH</label>
+            <textarea class="dt-in" placeholder="NAMA"></textarea>
+        </div>
+    </div>
+`;
+            });
+
+            // Muat data dari Firebase
+            onValue(dbRef, (snapshot) => {
+                const d = snapshot.val();
+                if (!d) return;
+                
+                if (d.y) document.getElementById('yearVal').value = d.y;
+                const stIn = document.querySelectorAll('.st-in');
+                d.st?.forEach((v, i) => { if(stIn[i]) stIn[i].value = v; });
+                
+                const ttIn = document.querySelectorAll('.tt-in');
+                d.tt?.forEach((v, i) => { 
+                    if(ttIn[i]) {
+                        ttIn[i].value = v;
+                        if(ttIn[i].classList.contains('sub-in')) applyColor(ttIn[i]);
+                    }
+                });
+                
+                const dtIn = document.querySelectorAll('.dt-in');
+                d.dt?.forEach((v, i) => { if(dtIn[i]) dtIn[i].value = v; });
+            });
+
+            setInterval(runSystem, 1000);
+        }
+
+        // LOGIK WARNA (DIPERBAIKI UNTUK BA, TS, PIU, PIQ)
+        window.applyColor = (el) => {
+            let val = el.value.trim().toUpperCase();
+            
+            // Pemetaan Singkatan ke Kelas CSS
+            if (val === 'SEJARAH') val = 'SEJ';
+            if (val.includes('PJ')) val = 'PJK';
+            if (val === 'TS') val = 'TAS';
+            if (val.includes('PIU')) val = 'PIU';
+            if (val.includes('PIQ')) val = 'PIQ';
+            if (val === 'TASM') val = 'TAS';
+
+            const td = el.closest('td');
+            // Padam semua kelas warna sedia ada
+            subjekList.forEach(s => td.classList.remove(`color-${s}`));
+            
+            // Tambah kelas warna jika padan
+            if (subjekList.includes(val)) {
+                td.classList.add(`color-${val}`);
+            }
+        };
+
+        // --- SISTEM AUTOMATIK ---
+        function runSystem() {
+            const now = new Date();
+            const hms = now.toLocaleTimeString('ms-MY', {hour12:false});
+            document.getElementById('liveClock').innerText = hms;
+
+            const currentMins = now.getHours() * 60 + now.getMinutes();
+            const currentDay = now.getDay() - 1;
+
+            document.querySelectorAll('.slot-cell').forEach(c => c.classList.remove('active-period'));
+            
+            const slotStarts = [430, 460, 490, 520, 550, 600, 630, 660, 690, 720];
+            
+            slotStarts.forEach((start, idx) => {
+                const end = slotEnds[idx];
+                if (currentMins >= start && currentMins < end) {
+                    const visualSlot = idx >= 5 ? idx + 1 : idx;
+                    const activeCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${visualSlot}"]`);
+                    if (activeCell) activeCell.classList.add('active-period');
+                }
+            });
+
+            let showAlarm = false;
+            let bannerMsg = "";
+
+            if (currentDay >= 0 && currentDay <= 4) {
+                slotEnds.forEach((end, idx) => {
+                    const diff = end - currentMins;
+                    if (diff > 0 && diff <= 5) {
+                        showAlarm = true;
+                        const rows = document.querySelectorAll('#ttBody tr');
+                        const currentRow = rows[currentDay];
+                        const currentVisualIdx = idx >= 5 ? idx + 1 : idx;
+                        const nextVisualIdx = (idx + 1) >= 5 ? (idx + 1) + 1 : (idx + 1);
+
+                        const currentSub = currentRow.querySelector(`td[data-slot="${currentVisualIdx}"] .sub-in`)?.value || "SUBJEK";
+                        let nextSub = "BALIK";
+                        if (idx < 9) {
+                            nextSub = currentRow.querySelector(`td[data-slot="${nextVisualIdx}"] .sub-in`)?.value || "SUBJEK SETERUSNYA";
+                        }
+                        if (idx === 4) nextSub = "REHAT";
+
+                        bannerMsg = `⚠️ SUBJEK [${currentSub}] AKAN TAMAT. SILA BERSEDIA UNTUK [${nextSub}].`;
+                    }
+                });
+            }
+
+            const banner = document.getElementById('alarmBanner');
+            const sound = document.getElementById('alarmSound');
+
+            if (showAlarm) {
+                banner.innerText = bannerMsg;
+                banner.classList.add('active');
+                if (!alarmTriggered) {
+                    sound.play().catch(e => console.log("Audio perlukan klik pertama user."));
+                    alarmTriggered = true;
+                }
+            } else {
+                banner.classList.remove('active');
+                alarmTriggered = false;
+            }
+        }
+
+        // --- DATABASE ---
+window.saveToFirebase = () => {
+    const inputKod = prompt("KOD AKSES:");
+    if (inputKod !== AUTH_KOD) return alert("KOD SALAH!");
+
+    const data = {
+        y: document.getElementById('yearVal').value,
+        st: Array.from(document.querySelectorAll('.st-in')).map(i => i.value),
+        tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
+        dt: Array.from(document.querySelectorAll('.dt-in')).map(i => i.value)
+    };
+
+    console.log("Memulakan proses simpan...");
+
+    set(dbRef, data)
+        .then(() => {
+            alert("✅ DATA BERJAYA DISIMPAN KE AWAN!");
+        })
+        .catch((error) => {
+            console.error("Ralat Firebase:", error);
+            alert("❌ GAGAL DISIMPAN: " + error.message);
+        });
+};
+
+        init();
+	changeSlide(0);
+    </script>
+</body>
+</html>
