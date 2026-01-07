@@ -233,19 +233,29 @@
                 tt.innerHTML += rTT;
             });
 
-            onValue(dbRef, (snapshot) => {
-                const d = snapshot.val();
-                if (!d) return;
-                if(d.t1) document.getElementById('teacher1').value = d.t1;
-                if(d.t2) document.getElementById('teacher2').value = d.t2;
-                const ttIn = document.querySelectorAll('.tt-in');
-                d.tt?.forEach((v, i) => { 
-                    if(ttIn[i]) {
-                        ttIn[i].value = v;
-                        if(ttIn[i].classList.contains('sub-in')) applyColor(ttIn[i]);
-                    }
-                });
-            });
+onValue(dbRef, (snapshot) => {
+    const d = snapshot.val();
+    if (!d) return;
+    
+    // Kemaskini Nama Guru
+    if(d.t1) document.getElementById('teacher1').value = d.t1;
+    if(d.t2) document.getElementById('teacher2').value = d.t2;
+    
+    const ttIn = document.querySelectorAll('.tt-in');
+    
+    // CARA SELAMAT: Periksa jika d.tt wujud sebelum buat loop
+    if (d.tt) {
+        for (var i = 0; i < d.tt.length; i++) {
+            if (ttIn[i]) {
+                ttIn[i].value = d.tt[i];
+                // Jika kotak itu adalah kotak subjek, warnakan
+                if (ttIn[i].classList.contains('sub-in')) {
+                    applyColor(ttIn[i]);
+                }
+            }
+        }
+    }
+});
             setInterval(runSystem, 1000);
         }
 
@@ -363,3 +373,4 @@
     </script>
 </body>
 </html>
+
