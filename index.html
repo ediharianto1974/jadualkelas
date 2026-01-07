@@ -23,9 +23,9 @@
         }
 
         @keyframes blinkDanger {
-            0% { background: var(--danger-red); box-shadow: 0 0 5px var(--danger-red); opacity: 1; }
-            50% { background: #ff5555; box-shadow: 0 0 20px var(--danger-red); opacity: 0.5; }
-            100% { background: var(--danger-red); box-shadow: 0 0 5px var(--danger-red); opacity: 1; }
+            0% { background: var(--danger-red); opacity: 1; }
+            50% { background: #ff5555; opacity: 0.5; }
+            100% { background: var(--danger-red); opacity: 1; }
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
@@ -39,8 +39,21 @@
 
         .header-box {
             text-align: center; margin-top: 15px; margin-bottom: 10px;
-            background: var(--glass-bg); padding: 10px 40px; border-radius: 15px;
+            background: var(--glass-bg); padding: 15px 40px; border-radius: 15px;
             border: 2px solid var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+
+        /* GURU KELAS STYLING */
+        .teacher-container {
+            display: flex; gap: 15px; justify-content: center; margin-top: 10px;
+        }
+        .teacher-badge {
+            background: rgba(0, 243, 255, 0.1); border: 1px solid var(--neon-blue);
+            padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; display: flex; align-items: center; gap: 8px;
+        }
+        .teacher-in {
+            background: transparent; border: none; color: var(--neon-yellow);
+            font-weight: bold; width: 150px; outline: none; text-align: left;
         }
 
         .content-container {
@@ -54,34 +67,18 @@
         th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.65rem; padding: 6px; border-radius: 5px; border: 1px solid var(--neon-blue); }
         td { background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; transition: 0.3s; overflow: hidden; }
         
-        /* HIGHLIGHT HARI */
-        .active-row { background: rgba(0, 243, 255, 0.05) !important; }
         .active-row td:first-child { 
-            background: var(--neon-blue) !important; color: black !important; font-weight: 900; 
-            box-shadow: 0 0 15px var(--neon-blue);
+            background: var(--neon-blue) !important; color: black !important; font-weight: 900; box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        /* SLOT AKTIF & PROGRESS BAR */
-        .active-period { 
-            border: 3px solid var(--neon-green) !important; 
-            animation: pulseGlow 2s infinite ease-in-out;
-            z-index: 10;
-        }
+        .active-period { border: 3px solid var(--neon-green) !important; animation: pulseGlow 2s infinite ease-in-out; z-index: 10; }
 
         .progress-container {
             width: 90%; height: 8px; background: rgba(255,255,255,0.1);
-            border-radius: 10px; margin: 5px auto; overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; margin: 5px auto; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .progress-bar {
-            height: 100%; width: 0%; background: var(--neon-green);
-            box-shadow: 0 0 10px var(--neon-green); transition: width 1s linear;
-        }
-
-        /* KESAN BERKELIP MINIT TERAKHIR */
-        .last-minutes {
-            animation: blinkDanger 0.8s infinite !important;
-        }
+        .progress-bar { height: 100%; width: 0%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); transition: width 1s linear; }
+        .last-minutes { animation: blinkDanger 0.8s infinite !important; }
 
         .cell-content { display: flex; flex-direction: column; height: 100%; justify-content: center; position: relative; z-index: 2; }
         .sub-in { font-size: 0.9rem; color: var(--neon-green); height: 40%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
@@ -94,13 +91,7 @@
         .color-MT { background: rgba(255,242,0,0.2) !important; border-color: #fff200 !important; }
         .color-SN { background: rgba(0,255,30,0.2) !important; border-color: #00ff1e !important; }
         .color-PAI { background: rgba(0,234,255,0.2) !important; border-color: #00eaff !important; }
-        .color-PM { background: rgba(255,0,234,0.2) !important; border-color: #ff00ea !important; }
         .color-SJ, .color-SEJ { background: rgba(255,145,0,0.3) !important; border-color: #ff9100 !important; }
-        .color-PJ, .color-PK, .color-PJK { background: rgba(149,255,0,0.2) !important; border-color: #95ff00 !important; }
-        .color-PSV { background: rgba(255,0,115,0.25) !important; border-color: #ff0073 !important; }
-        .color-BA { background: rgba(162,0,255,0.3) !important; border-color: #a200ff !important; }
-        .color-PIQPM { background: linear-gradient(135deg, rgba(0,200,150,0.3), rgba(255,0,234,0.3)) !important; border-color: #00ffaa !important; }
-        .color-PIUPM { background: linear-gradient(135deg, rgba(0,255,100,0.3), rgba(255,0,234,0.3)) !important; border-color: #00ff64 !important; }
 
         .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
         .btn { padding: 8px 20px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
@@ -110,7 +101,7 @@
         #alarmBanner {
             position: fixed; top: -120px; left: 0; width: 100%; background: linear-gradient(90deg, #ff0055, #ff0000);
             color: white; padding: 20px; text-align: center; font-weight: 900; z-index: 4000; transition: 0.6s;
-            font-size: 1.2rem; border-bottom: 3px solid white; box-shadow: 0 5px 30px rgba(255,0,0,0.5);
+            font-size: 1.2rem; border-bottom: 3px solid white;
         }
         #alarmBanner.active { top: 0; }
     </style>
@@ -123,7 +114,17 @@
 
     <div class="header-box">
         <h1>JADUAL WAKTU 6 CEMERLANG</h1>
-        <h2 style="font-size:0.8rem; opacity:0.7;"><span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
+        <div class="teacher-container">
+            <div class="teacher-badge">
+                <span style="color:var(--neon-blue)">GURU 1:</span>
+                <input type="text" id="teacher1" class="teacher-in" placeholder="NAMA GURU 1">
+            </div>
+            <div class="teacher-badge">
+                <span style="color:var(--neon-blue)">GURU 2:</span>
+                <input type="text" id="teacher2" class="teacher-in" placeholder="NAMA GURU 2">
+            </div>
+        </div>
+        <h2 style="font-size:0.8rem; opacity:0.7; margin-top:10px;"><span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
     </div>
 
     <div class="content-container">
@@ -198,6 +199,11 @@
             onValue(dbRef, (snapshot) => {
                 const d = snapshot.val();
                 if (!d) return;
+                
+                // Load Teacher Names
+                if(d.t1) document.getElementById('teacher1').value = d.t1;
+                if(d.t2) document.getElementById('teacher2').value = d.t2;
+
                 const ttIn = document.querySelectorAll('.tt-in');
                 d.tt?.forEach((v, i) => { 
                     if(ttIn[i]) {
@@ -247,24 +253,16 @@
                     if (activeCell) {
                         activeCell.classList.add('active-period');
                         const currentSub = activeCell.querySelector('.sub-in').value;
-
-                        // SMART LOGIC: Deteksi subjek berkembar
                         let actualStart = start;
                         let actualEnd = end;
 
-                        // Cek slot sebelum (jika sama, masa mula ditarik ke belakang)
                         const prevVisual = (idx - 1) >= 5 ? (idx - 1) + 1 : (idx - 1);
                         const prevCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${prevVisual}"]`);
-                        if(prevCell && prevCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") {
-                            actualStart = slotStarts[idx-1];
-                        }
+                        if(prevCell && prevCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualStart = slotStarts[idx-1];
 
-                        // Cek slot selepas (jika sama, masa tamat ditarik ke depan)
                         const nextVisual = (idx + 1) >= 5 ? (idx + 1) + 1 : (idx + 1);
                         const nextCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${nextVisual}"]`);
-                        if(nextCell && nextCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") {
-                            actualEnd = slotEnds[idx+1];
-                        }
+                        if(nextCell && nextCell.querySelector('.sub-in').value === currentSub && currentSub !== "-") actualEnd = slotEnds[idx+1];
 
                         const total = actualEnd - actualStart;
                         const elapsed = currentMins - actualStart;
@@ -273,12 +271,10 @@
 
                         let pContainer = document.createElement('div');
                         pContainer.className = 'progress-container';
-                        // Tambah class 'last-minutes' jika baki masa <= 5 minit
                         const blinkClass = (timeLeft <= 5) ? 'last-minutes' : '';
                         pContainer.innerHTML = `<div class="progress-bar ${blinkClass}" style="width:${percent}%"></div>`;
                         activeCell.querySelector('.cell-content').appendChild(pContainer);
 
-                        // Alarm & Banner
                         const banner = document.getElementById('alarmBanner');
                         if(timeLeft <= 5 && currentSub !== "-") {
                             banner.innerText = `⚠️ ${currentSub} TAMAT DALAM ${timeLeft} MINIT!`;
@@ -298,8 +294,12 @@
 
         window.saveToFirebase = () => {
             if (prompt("KOD AKSES:") !== AUTH_KOD) return alert("KOD SALAH!");
-            const data = { tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value) };
-            set(dbRef, data).then(() => alert("✅ DISIMPAN!"));
+            const data = { 
+                tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
+                t1: document.getElementById('teacher1').value,
+                t2: document.getElementById('teacher2').value
+            };
+            set(dbRef, data).then(() => alert("✅ JADUAL & NAMA GURU DISIMPAN!"));
         };
 
         window.resetFirebase = () => {
