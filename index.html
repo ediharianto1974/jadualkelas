@@ -15,11 +15,10 @@
             --active-glow: rgba(57, 255, 20, 0.4);
         }
 
-        /* ANIMASI BARU */
         @keyframes pulseGlow {
-            0% { box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green); opacity: 1; }
-            50% { box-shadow: 0 0 25px var(--neon-green), inset 0 0 15px var(--neon-green); opacity: 0.8; }
-            100% { box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green); opacity: 1; }
+            0% { box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green); }
+            50% { box-shadow: 0 0 20px var(--neon-green), inset 0 0 10px var(--neon-green); }
+            100% { box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green); }
         }
 
         @keyframes scanning {
@@ -27,82 +26,62 @@
             100% { transform: translateY(100%); }
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            text-transform: uppercase;
-            font-family: 'Segoe UI', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
 
         body {
             background: url('space.gif') no-repeat center center fixed;
-            background-size: cover;
-            background-color: #050505;
-            color: white;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-size: cover; background-color: #050505; color: white;
+            height: 100vh; width: 100vw; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         .header-box {
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 15px;
-            background: var(--glass-bg);
-            padding: 15px 40px;
-            border-radius: 15px;
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
-            width: fit-content;
+            text-align: center; margin-top: 20px; margin-bottom: 15px;
+            background: var(--glass-bg); padding: 15px 40px; border-radius: 15px;
+            border: 2px solid var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
         }
 
         .content-container {
-            width: 98%;
-            max-width: 1400px;
-            flex-grow: 1;
-            background: var(--card-bg);
-            border-radius: 20px;
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            padding: 15px;
-            backdrop-filter: blur(15px);
-            overflow-x: auto;
-            margin-bottom: 20px;
+            width: 98%; max-width: 1400px; flex-grow: 1;
+            background: var(--card-bg); border-radius: 20px;
+            border: 1px solid rgba(0, 243, 255, 0.2); padding: 15px;
+            backdrop-filter: blur(15px); overflow-x: auto; margin-bottom: 20px;
         }
 
-        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; min-width: 1000px; }
+        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; min-width: 1100px; }
         th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.65rem; padding: 6px; border-radius: 5px; border: 1px solid var(--neon-blue); }
         td { background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; transition: 0.3s; overflow: hidden; }
         
-        /* EFEK AKTIF (PULSE & SCAN) */
+        /* HIGHLIGHT HARI SEMASA */
+        .active-row { 
+            background: rgba(0, 243, 255, 0.05) !important;
+            outline: 1px solid rgba(0, 243, 255, 0.3);
+        }
+        .active-row td:first-child { 
+            background: var(--neon-blue) !important; color: black !important; font-weight: 900; 
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* EFEK AKTIF & PROGRESS BAR */
         .active-period { 
             border: 3px solid var(--neon-green) !important; 
-            background: var(--active-glow) !important;
-            animation: pulseGlow 1.5s infinite ease-in-out;
+            animation: pulseGlow 2s infinite ease-in-out;
             z-index: 10;
         }
 
-        /* Garisan Scanning di dalam kotak aktif */
-        .active-period::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 20px;
-            background: linear-gradient(to bottom, transparent, rgba(57, 255, 20, 0.5), transparent);
-            animation: scanning 2s infinite linear;
-            pointer-events: none;
+        .progress-container {
+            width: 80%; height: 6px; background: rgba(255,255,255,0.1);
+            border-radius: 10px; margin: 4px auto 0; overflow: hidden;
+            border: 1px solid rgba(57, 255, 20, 0.3);
         }
-
-        .active-period .sub-in {
-            color: white !important;
-            text-shadow: 0 0 10px var(--neon-green);
+        .progress-bar {
+            height: 100%; width: 0%; background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green); transition: width 1s linear;
         }
 
         .cell-content { display: flex; flex-direction: column; height: 100%; justify-content: center; position: relative; z-index: 2; }
-        .sub-in { font-size: 0.9rem; color: var(--neon-green); height: 50%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
-        .teach-in { font-size: 0.55rem; opacity: 0.7; height: 30%; background: transparent; border: none; text-align: center; color: white; outline: none; }
+        .sub-in { font-size: 0.9rem; color: var(--neon-green); height: 40%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
+        .teach-in { font-size: 0.55rem; opacity: 0.7; height: 25%; background: transparent; border: none; text-align: center; color: white; outline: none; }
         .rehat-col { background: rgba(255, 0, 85, 0.2) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.5rem; text-align: center; border: 1px solid var(--neon-pink) !important; width: 40px; }
 
         /* WARNA SUBJEK */
@@ -123,16 +102,12 @@
         .btn-row { display: flex; gap: 10px; margin-bottom: 20px; }
         .btn { padding: 10px 25px; background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; border-radius: 10px; font-weight: bold; transition: 0.3s; }
         .btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
-        
         .clock { position: fixed; top: 15px; right: 15px; color: var(--neon-blue); font-weight: 900; font-size: 1.4rem; background: rgba(0,0,0,0.8); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--neon-blue); z-index: 2000; }
         
         #alarmBanner {
-            position: fixed; top: -120px; left: 0; width: 100%;
-            background: linear-gradient(90deg, #ff0055, #ff0000);
-            color: white; padding: 20px; text-align: center;
-            font-weight: 900; z-index: 4000; transition: 0.6s;
-            font-size: 1.2rem; border-bottom: 3px solid white;
-            box-shadow: 0 5px 30px rgba(255,0,0,0.5);
+            position: fixed; top: -120px; left: 0; width: 100%; background: linear-gradient(90deg, #ff0055, #ff0000);
+            color: white; padding: 20px; text-align: center; font-weight: 900; z-index: 4000; transition: 0.6s;
+            font-size: 1.2rem; border-bottom: 3px solid white; box-shadow: 0 5px 30px rgba(255,0,0,0.5);
         }
         #alarmBanner.active { top: 0; }
     </style>
@@ -144,17 +119,17 @@
     <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
     <div class="header-box">
-        <h1>JADUAL WAKTU KELAS 6 CEMERLANG</h1>
-        <h2>SESI <input type="text" id="yearVal" maxlength="4" style="width:50px; background:transparent; border:none; color:var(--neon-pink); font-weight:bold;" value="2026"></h2>
+        <h1 id="mainTitle">JADUAL WAKTU 6 CEMERLANG</h1>
+        <h2 style="font-size:0.8rem; opacity:0.7;">HARI INI: <span id="todayDate" style="color:var(--neon-yellow);"></span></h2>
     </div>
 
     <div class="content-container">
         <table id="ttTable">
             <thead>
                 <tr>
-                    <th style="width: 80px;">HARI</th>
+                    <th style="width: 100px;">HARI</th>
                     <th>07:10-07:40</th><th>07:40-08:10</th><th>08:10-08:40</th><th>08:40-09:10</th><th>09:10-09:40</th>
-                    <th style="width: 40px;">R<br>E<br>H<br>A<br>T</th>
+                    <th style="width: 45px;">REHAT</th>
                     <th>10:00-10:30</th><th>10:30-11:00</th><th>11:00-11:30</th><th>11:30-12:00</th><th>12:00-12:30</th><th>12:30-01:00</th>
                 </tr>
             </thead>
@@ -163,8 +138,8 @@
     </div>
 
     <div class="btn-row">
-        <button class="btn" onclick="saveToFirebase()">💾 SIMPAN JADUAL</button>
-        <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM SEMUA</button>
+        <button class="btn" onclick="saveToFirebase()">💾 SIMPAN</button>
+        <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM</button>
     </div>
 
     <script type="module">
@@ -189,18 +164,17 @@
         const hariArr = ['ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT'];
         const rehatTxt = ['R', 'E', 'H', 'A', 'T'];
         const subjekList = ['BM','BI','MT','SN','PAI','PM','SJ','SEJ','PJ','PK','PJK','PSV','MZ','RBT','BA','PIQPM','PIUPM'];
-        
-        const slotEnds = [460, 490, 520, 550, 580, 630, 660, 690, 720, 750, 780]; 
+        const slotStarts = [430, 460, 490, 520, 550, 600, 630, 660, 690, 720, 750];
+        const slotEnds = [460, 490, 520, 550, 580, 630, 660, 690, 720, 750, 780];
         const AUTH_KOD = "jadualwaktu";
-        
         let alarmTriggered = false;
 
         function init() {
             const tt = document.getElementById('ttBody');
             tt.innerHTML = ""; 
-
             hariArr.forEach((h, i) => {
-                let rTT = `<tr><td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.75rem;">${h}</td>`;
+                let rTT = `<tr id="row-${i}">
+                    <td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.8rem;">${h}</td>`;
                 for(let j=0; j<12; j++) {
                     if(j === 5) {
                         rTT += `<td class="rehat-col">${rehatTxt[i]}</td>`;
@@ -220,7 +194,6 @@
             onValue(dbRef, (snapshot) => {
                 const d = snapshot.val();
                 if (!d) return;
-                if (d.y) document.getElementById('yearVal').value = d.y;
                 const ttIn = document.querySelectorAll('.tt-in');
                 d.tt?.forEach((v, i) => { 
                     if(ttIn[i]) {
@@ -229,7 +202,6 @@
                     }
                 });
             });
-
             setInterval(runSystem, 1000);
         }
 
@@ -239,7 +211,6 @@
             else if (val.includes('PIU/PM')) val = 'PIUPM';
             else if (val === 'SEJARAH') val = 'SEJ';
             else if (val.includes('PJ')) val = 'PJK';
-
             const td = el.closest('td');
             subjekList.forEach(s => td.classList.remove(`color-${s}`));
             if (subjekList.includes(val)) td.classList.add(`color-${val}`);
@@ -247,78 +218,77 @@
 
         function runSystem() {
             const now = new Date();
-            const hms = now.toLocaleTimeString('ms-MY', {hour12:false});
-            document.getElementById('liveClock').innerText = hms;
+            document.getElementById('liveClock').innerText = now.toLocaleTimeString('ms-MY', {hour12:false});
+            document.getElementById('todayDate').innerText = now.toLocaleDateString('ms-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             const currentMins = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1;
+            const currentDay = now.getDay() - 1; // 0=Isnin, 4=Jumaat
 
-            document.querySelectorAll('.slot-cell').forEach(c => c.classList.remove('active-period'));
-            const slotStarts = [430, 460, 490, 520, 550, 600, 630, 660, 690, 720, 750];
-            
+            // 1. Highlight Row Hari Semasa
+            document.querySelectorAll('#ttBody tr').forEach((row, idx) => {
+                row.classList.toggle('active-row', idx === currentDay);
+            });
+
+            // 2. Padam semua active state & progress bar lama
+            document.querySelectorAll('.slot-cell').forEach(c => {
+                c.classList.remove('active-period');
+                const oldBar = c.querySelector('.progress-container');
+                if(oldBar) oldBar.remove();
+            });
+
+            // 3. Cari slot aktif & Tambah Progress Bar
             slotStarts.forEach((start, idx) => {
                 const end = slotEnds[idx];
                 if (currentMins >= start && currentMins < end) {
                     const visualSlot = idx >= 5 ? idx + 1 : idx;
                     const activeCell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${visualSlot}"]`);
-                    if (activeCell) activeCell.classList.add('active-period');
+                    
+                    if (activeCell) {
+                        activeCell.classList.add('active-period');
+                        
+                        // Kira peratusan masa berlalu
+                        const total = end - start;
+                        const elapsed = currentMins - start;
+                        const percent = (elapsed / total) * 100;
+
+                        // Cipta progress bar jika belum ada
+                        let pContainer = document.createElement('div');
+                        pContainer.className = 'progress-container';
+                        pContainer.innerHTML = `<div class="progress-bar" style="width:${percent}%"></div>`;
+                        activeCell.querySelector('.cell-content').appendChild(pContainer);
+                    }
                 }
             });
 
-            let showAlarm = false;
-            let bannerMsg = "";
+            // 4. Sistem Alarm
             if (currentDay >= 0 && currentDay <= 4) {
                 slotEnds.forEach((end, idx) => {
                     const diff = end - currentMins;
                     if (diff > 0 && diff <= 5) {
-                        showAlarm = true;
-                        const rows = document.querySelectorAll('#ttBody tr');
-                        const currentRow = rows[currentDay];
-                        const currentVisualIdx = idx >= 5 ? idx + 1 : idx;
-                        const nextVisualIdx = (idx + 1) >= 5 ? (idx + 1) + 1 : (idx + 1);
-                        const currentSub = currentRow.querySelector(`td[data-slot="${currentVisualIdx}"] .sub-in`)?.value || "SUBJEK";
-                        let nextSub = "BALIK";
-                        if (idx < 10) nextSub = currentRow.querySelector(`td[data-slot="${nextVisualIdx}"] .sub-in`)?.value || "SUBJEK SETERUSNYA";
-                        if (idx === 4) nextSub = "REHAT";
-                        bannerMsg = `⚠️ SUBJEK [${currentSub}] AKAN TAMAT. SILA BERSEDIA UNTUK [${nextSub}].`;
+                        const banner = document.getElementById('alarmBanner');
+                        banner.innerText = `⚠️ SUBJEK AKAN TAMAT DALAM ${diff} MINIT!`;
+                        banner.classList.add('active');
+                        if (!alarmTriggered) {
+                            document.getElementById('alarmSound').play().catch(() => {});
+                            alarmTriggered = true;
+                        }
+                    } else if (diff <= 0) {
+                        document.getElementById('alarmBanner').classList.remove('active');
+                        alarmTriggered = false;
                     }
                 });
-            }
-
-            const banner = document.getElementById('alarmBanner');
-            const sound = document.getElementById('alarmSound');
-            if (showAlarm) {
-                banner.innerText = bannerMsg;
-                banner.classList.add('active');
-                if (!alarmTriggered) {
-                    sound.play().catch(e => console.log("Audio perlukan klik."));
-                    alarmTriggered = true;
-                }
-            } else {
-                banner.classList.remove('active');
-                alarmTriggered = false;
             }
         }
 
         window.saveToFirebase = () => {
-            const inputKod = prompt("KOD AKSES:");
-            if (inputKod !== AUTH_KOD) return alert("KOD SALAH!");
-            const data = {
-                y: document.getElementById('yearVal').value,
-                tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value)
-            };
-            set(dbRef, data).then(() => alert("✅ JADUAL DISIMPAN!")).catch((err) => alert("❌ GAGAL: " + err.message));
+            if (prompt("KOD AKSES:") !== AUTH_KOD) return alert("KOD SALAH!");
+            const data = { tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value) };
+            set(dbRef, data).then(() => alert("✅ DISIMPAN!"));
         };
 
         window.resetFirebase = () => {
-            const inputKod = prompt("KOD AKSES UNTUK PADAM:");
-            if (inputKod !== AUTH_KOD) return alert("KOD SALAH!");
-            if(confirm("ADAKAH ANDA PASTI?")) {
-                remove(dbRef).then(() => {
-                    alert("✅ SEMUA DATA TELAH DIPADAM");
-                    location.reload();
-                });
-            }
+            if (prompt("KOD PADAM:") !== AUTH_KOD) return alert("KOD SALAH!");
+            if(confirm("PADAM SEMUA?")) remove(dbRef).then(() => location.reload());
         }
 
         init();
