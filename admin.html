@@ -2,28 +2,30 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Jadual</title>
+    <title>Admin Jadual 6C</title>
     <style>
         body { font-family: sans-serif; padding: 20px; background: #0a0a0a; color: white; text-align: center; }
-        .card { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; }
-        input { width: 90%; padding: 15px; margin: 15px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-size: 1.1rem; }
-        button { width: 95%; padding: 15px; margin: 5px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; }
+        .card { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #333; box-shadow: 0 0 20px rgba(0,255,0,0.1); }
+        input { width: 90%; padding: 15px; margin: 15px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-size: 1.1rem; text-transform: uppercase; }
+        button { width: 95%; padding: 15px; margin: 5px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; }
         .btn-send { background: #39ff14; color: black; }
         .btn-clear { background: #ff0055; color: white; }
+        .status { margin-top: 10px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
-    <h2>🎮 KAWALAN JADUAL</h2>
+    <h2>🎮 KAWALAN JADUAL 6C</h2>
     <div class="card">
         <p>Taip Pengumuman:</p>
-        <input type="text" id="msg" placeholder="Contoh: Perhimpunan di Dewan...">
+        <input type="text" id="msg" placeholder="CONTOH: SILA BAWA BAJU PJ...">
         <button class="btn-send" onclick="hantar()">🚀 HANTAR & BUNYI ALARM</button>
         <button class="btn-clear" onclick="padam()">❌ PADAM PENGUMUMAN</button>
+        <p class="status" id="statusTxt">Status: Sedia</p>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-        import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBtA37bRurRoe7kCTUX_aIQHNv0cjWG09A",
@@ -34,21 +36,43 @@
             messagingSenderId: "164261211870",
             appId: "1:164261211870:web:03eb60e7276601953c1c4f"
         };
+
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // PENTING: Mesti gunakan 'jadual_6c' supaya sama dengan index.html
+        const targetRef = ref(db, 'jadual_6c');
+
         window.hantar = () => {
-            const txt = document.getElementById('msg').value;
-            if(!txt) return alert("Taip sesuatu!");
-            update(ref(db, 'jadual'), { announcement: txt })
-            .then(() => alert("Dihantar!"));
+            const txt = document.getElementById('msg').value.trim();
+            const status = document.getElementById('statusTxt');
+            
+            if(!txt) return alert("Sila taip pengumuman dahulu!");
+            
+            status.innerText = "Menghantar...";
+            
+            update(targetRef, { 
+                announcement: txt 
+            })
+            .then(() => {
+                status.innerText = "✅ Berjaya dihantar ke skrin!";
+                setTimeout(() => { status.innerText = "Status: Sedia"; }, 3000);
+            })
+            .catch((err) => {
+                alert("Ralat: " + err.message);
+                status.innerText = "❌ Gagal!";
+            });
         };
 
         window.padam = () => {
-            update(ref(db, 'jadual'), { announcement: "" })
+            if(!confirm("Padam pengumuman di skrin?")) return;
+            
+            update(targetRef, { 
+                announcement: "" 
+            })
             .then(() => {
                 document.getElementById('msg').value = "";
-                alert("Pengumuman Dipadam!");
+                alert("Pengumuman telah dipadam.");
             });
         };
     </script>
