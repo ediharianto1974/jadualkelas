@@ -15,7 +15,7 @@
             --card-bg: rgba(10, 10, 15, 0.95);
         }
 
-        /* ANIMASI POP-UP */
+        /* ANIMASI */
         @keyframes zoomIn {
             from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
             to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
@@ -52,47 +52,45 @@
             align-items: center;
         }
 
-/* POP-UP GERGASI YANG LEBIH KEMAS */
-#giantPopup {
-    display: none;
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 95vw; /* Lebarkan sedikit */
-    max-height: 90vh; /* Hadkan tinggi supaya tak terkeluar skrin */
-    background: var(--danger-red);
-    color: white;
-    padding: 40px;
-    border: 12px solid white;
-    border-radius: 40px;
-    text-align: center;
-    z-index: 10000;
-    box-shadow: 0 0 150px rgba(255,0,0,1);
-    animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    
-    /* Tambahan untuk susunan tengah */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+        /* POP-UP GERGASI DENGAN FLEXBOX */
+        #giantPopup {
+            display: none; /* Dikawal oleh JS */
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 95vw;
+            max-height: 90vh;
+            background: var(--danger-red);
+            color: white;
+            padding: 40px;
+            border: 12px solid white;
+            border-radius: 40px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 0 150px rgba(255,0,0,1);
+            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            
+            /* Memastikan teks sentiasa di tengah */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-#popupTitle { 
-    font-size: 2.5rem; 
-    font-weight: 900; 
-    margin-bottom: 15px; 
-    border-bottom: 4px solid white; 
-    padding-bottom: 5px;
-    letter-spacing: 5px;
-}
+        #popupTitle { 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            margin-bottom: 15px; 
+            border-bottom: 4px solid white; 
+            padding-bottom: 5px;
+            letter-spacing: 5px;
+        }
 
-#popupMsg { 
-    font-weight: 900; 
-    line-height: 1.2; 
-    word-wrap: break-word;
-    width: 100%;
-    /* Kita buang saiz fon tetap di sini kerana JS akan kawal */
-}
+        #popupMsg { 
+            font-weight: 900; 
+            line-height: 1.2; 
+            word-wrap: break-word;
+            width: 100%;
+        }
 
         /* HEADER & CLOCK */
         .header-box {
@@ -181,7 +179,7 @@
 
         .marquee-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 20s linear infinite; }
 
-        /* ALARM BANNER (TOP) */
+        /* ALARM BANNER */
         #alarmBanner {
             position: fixed; top: -100px; left: 0; width: 100%; background: var(--danger-red);
             color: white; padding: 10px; text-align: center; font-weight: 900; z-index: 5000;
@@ -310,9 +308,11 @@
             const d = snapshot.val();
             if (!d) return;
             
+            // Update Guru
             if(d.t1) document.getElementById('teacher1').value = d.t1;
             if(d.t2) document.getElementById('teacher2').value = d.t2;
             
+            // Update Jadual
             const inputs = document.querySelectorAll('.tt-in');
             if(d.tt) d.tt.forEach((val, idx) => {
                 if(inputs[idx]) {
@@ -321,55 +321,41 @@
                 }
             });
 
-            // LOGIK POP-UP & MARQUEE
+            // LOGIK PENGUMUMAN (PEMBETULAN)
             const popup = document.getElementById('giantPopup');
             const popupMsg = document.getElementById('popupMsg');
             const bar = document.getElementById('announcementBar');
             const ticker = document.getElementById('tickerText');
 
-// Gantikan blok pengumuman di dalam onValue dengan kod ini:
-if (d.announcement && d.announcement.trim() !== "") {
-    if (d.announcement !== lastAnnouncement) {
-        const popup = document.getElementById('giantPopup');
-        const popupMsg = document.getElementById('popupMsg');
-        
-        // 1. Masukkan teks
-        popupMsg.innerText = d.announcement;
+            if (d.announcement && d.announcement.trim() !== "") {
+                if (d.announcement !== lastAnnouncement) {
+                    popupMsg.innerText = d.announcement;
 
-        // 2. LOGIK DINAMIK: Laraskan saiz fon berdasarkan jumlah huruf
-        let textLength = d.announcement.length;
-        
-        if (textLength > 150) {
-            popupMsg.style.fontSize = "3rem"; // Sangat panjang
-        } else if (textLength > 80) {
-            popupMsg.style.fontSize = "4.5rem"; // Sederhana panjang
-        } else {
-            popupMsg.style.fontSize = "6.5rem"; // Pendek dan padat
-        }
+                    // Dinamik Font Size
+                    let len = d.announcement.length;
+                    if (len > 150) popupMsg.style.fontSize = "3rem";
+                    else if (len > 80) popupMsg.style.fontSize = "4.5rem";
+                    else popupMsg.style.fontSize = "6.5rem";
 
-        // 3. Paparkan pop-up (Guna flex supaya teks sentiasa di tengah)
-        popup.style.display = 'flex'; 
+                    // Papar Pop-up
+                    popup.style.display = 'flex'; 
+                    setTimeout(() => { popup.style.display = 'none'; }, 15000);
+                    
+                    lastAnnouncement = d.announcement;
+                }
+                
+                // Papar Scrolling Text
+                ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
+                bar.style.display = "block";
+            } else {
+                // Padam Jika Kosong
+                bar.style.display = "none";
+                popup.style.display = "none";
+                lastAnnouncement = "";
+            }
+        });
 
-        // 4. Tutup pop-up selepas 15 saat
-        setTimeout(() => { 
-            popup.style.display = 'none'; 
-        }, 15000);
-
-        lastAnnouncement = d.announcement;
-    }
-    
-    // Teks bergerak di bawah kekal dipaparkan
-    ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
-    bar.style.display = "block";
-
-} else {
-    // PENTING: Jika pengumuman dikosongkan di admin, sorokkan semua bar & pop-up
-    bar.style.display = "none";
-    document.getElementById('giantPopup').style.display = "none";
-    lastAnnouncement = "";
-}
-
-        // SISTEM MASA (SETIAP SAAT)
+        // SISTEM MASA
         function runSystem() {
             const now = new Date();
             const timeStr = now.getHours().toString().padStart(2,'0') + ":" + 
@@ -395,7 +381,6 @@ if (d.announcement && d.announcement.trim() !== "") {
                         if(cell) {
                             cell.classList.add('active-period');
                             
-                            // Amaran Tamat Waktu (Banner Merah)
                             const timeLeft = end - currentMins;
                             const banner = document.getElementById('alarmBanner');
                             if(timeLeft <= 5 && timeLeft > 0) {
@@ -417,7 +402,7 @@ if (d.announcement && d.announcement.trim() !== "") {
                 t1: document.getElementById('teacher1').value,
                 t2: document.getElementById('teacher2').value,
                 tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
-                announcement: lastAnnouncement // Kekalkan mesej sedia ada
+                announcement: lastAnnouncement
             };
             set(dbRef, data).then(() => alert("Data Disimpan!"));
         };
@@ -428,10 +413,8 @@ if (d.announcement && d.announcement.trim() !== "") {
             }
         };
 
-        // Mula
         initTable();
         setInterval(runSystem, 1000);
     </script>
 </body>
 </html>
-
