@@ -52,26 +52,47 @@
             align-items: center;
         }
 
-        /* POP-UP GERGASI */
-        #giantPopup {
-            display: none;
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90vw;
-            background: var(--danger-red);
-            color: white;
-            padding: 60px;
-            border: 15px solid white;
-            border-radius: 40px;
-            text-align: center;
-            z-index: 10000;
-            box-shadow: 0 0 150px rgba(255,0,0,1);
-            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+/* POP-UP GERGASI YANG LEBIH KEMAS */
+#giantPopup {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95vw; /* Lebarkan sedikit */
+    max-height: 90vh; /* Hadkan tinggi supaya tak terkeluar skrin */
+    background: var(--danger-red);
+    color: white;
+    padding: 40px;
+    border: 12px solid white;
+    border-radius: 40px;
+    text-align: center;
+    z-index: 10000;
+    box-shadow: 0 0 150px rgba(255,0,0,1);
+    animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    /* Tambahan untuk susunan tengah */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-        #popupTitle { font-size: 3rem; font-weight: 900; margin-bottom: 20px; border-bottom: 5px solid white; display: inline-block; padding-bottom: 10px; }
-        #popupMsg { font-size: 6rem; font-weight: 900; line-height: 1.1; word-wrap: break-word; }
+#popupTitle { 
+    font-size: 2.5rem; 
+    font-weight: 900; 
+    margin-bottom: 15px; 
+    border-bottom: 4px solid white; 
+    padding-bottom: 5px;
+    letter-spacing: 5px;
+}
+
+#popupMsg { 
+    font-weight: 900; 
+    line-height: 1.2; 
+    word-wrap: break-word;
+    width: 100%;
+    /* Kita buang saiz fon tetap di sini kerana JS akan kawal */
+}
 
         /* HEADER & CLOCK */
         .header-box {
@@ -306,25 +327,47 @@
             const bar = document.getElementById('announcementBar');
             const ticker = document.getElementById('tickerText');
 
-            if (d.announcement && d.announcement.trim() !== "") {
-                if (d.announcement !== lastAnnouncement) {
-                    // Cetus Pop-up
-                    popupMsg.innerText = d.announcement;
-                    popup.style.display = 'block';
-                    
-                    // Hilang selepas 15 saat
-                    setTimeout(() => { popup.style.display = 'none'; }, 15000);
-                    
-                    lastAnnouncement = d.announcement;
-                }
-                ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
-                bar.style.display = "block";
-            } else {
-                bar.style.display = "none";
-                popup.style.display = "none";
-                lastAnnouncement = "";
-            }
-        });
+// Gantikan blok pengumuman di dalam onValue dengan kod ini:
+if (d.announcement && d.announcement.trim() !== "") {
+    if (d.announcement !== lastAnnouncement) {
+        const popup = document.getElementById('giantPopup');
+        const popupMsg = document.getElementById('popupMsg');
+        
+        // 1. Masukkan teks
+        popupMsg.innerText = d.announcement;
+
+        // 2. LOGIK DINAMIK: Laraskan saiz fon berdasarkan jumlah huruf
+        let textLength = d.announcement.length;
+        
+        if (textLength > 150) {
+            popupMsg.style.fontSize = "3rem"; // Sangat panjang
+        } else if (textLength > 80) {
+            popupMsg.style.fontSize = "4.5rem"; // Sederhana panjang
+        } else {
+            popupMsg.style.fontSize = "6.5rem"; // Pendek dan padat
+        }
+
+        // 3. Paparkan pop-up (Guna flex supaya teks sentiasa di tengah)
+        popup.style.display = 'flex'; 
+
+        // 4. Tutup pop-up selepas 15 saat
+        setTimeout(() => { 
+            popup.style.display = 'none'; 
+        }, 15000);
+
+        lastAnnouncement = d.announcement;
+    }
+    
+    // Teks bergerak di bawah kekal dipaparkan
+    ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
+    bar.style.display = "block";
+
+} else {
+    // PENTING: Jika pengumuman dikosongkan di admin, sorokkan semua bar & pop-up
+    bar.style.display = "none";
+    document.getElementById('giantPopup').style.display = "none";
+    lastAnnouncement = "";
+}
 
         // SISTEM MASA (SETIAP SAAT)
         function runSystem() {
@@ -391,3 +434,4 @@
     </script>
 </body>
 </html>
+
