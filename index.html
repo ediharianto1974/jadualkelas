@@ -15,19 +15,18 @@
             --card-bg: rgba(10, 10, 15, 0.95);
         }
 
+        /* ANIMASI POP-UP */
+        @keyframes zoomIn {
+            from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
         @keyframes pulseGlow {
             0% { box-shadow: 0 0 5px var(--neon-green); }
             50% { box-shadow: 0 0 20px var(--neon-green); }
             100% { box-shadow: 0 0 5px var(--neon-green); }
         }
 
-        @keyframes blinkDanger {
-            0% { background: var(--danger-red); opacity: 1; }
-            50% { background: #ff5555; opacity: 0.5; }
-            100% { background: var(--danger-red); opacity: 1; }
-        }
-
-        /* Animasi Teks Bergerak */
         @keyframes marquee {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
@@ -53,6 +52,28 @@
             align-items: center;
         }
 
+        /* POP-UP GERGASI */
+        #giantPopup {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            background: var(--danger-red);
+            color: white;
+            padding: 60px;
+            border: 15px solid white;
+            border-radius: 40px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 0 150px rgba(255,0,0,1);
+            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #popupTitle { font-size: 3rem; font-weight: 900; margin-bottom: 20px; border-bottom: 5px solid white; display: inline-block; padding-bottom: 10px; }
+        #popupMsg { font-size: 6rem; font-weight: 900; line-height: 1.1; word-wrap: break-word; }
+
+        /* HEADER & CLOCK */
         .header-box {
             margin-top: 5px; 
             background: var(--glass-bg); 
@@ -71,8 +92,6 @@
         .title-row h1 {
             grid-column: 2;
             font-size: 1.8rem;
-            letter-spacing: 2px;
-            color: white;
             text-shadow: 0 0 10px var(--neon-blue);
         }
 
@@ -86,9 +105,6 @@
             padding: 5px 15px; 
             border-radius: 8px;
             border: 1px solid var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-            min-width: 160px;
-            text-align: center;
         }
 
         .teacher-container {
@@ -109,17 +125,12 @@
         }
         
         .teacher-label { color: var(--neon-blue); font-weight: 900; font-size: 0.8rem;}
-        
         .teacher-input-field {
-            background: transparent; 
-            border: none; 
-            color: var(--neon-yellow);
-            font-weight: bold; 
-            width: 280px; 
-            outline: none; 
-            font-size: 1rem;
+            background: transparent; border: none; color: var(--neon-yellow);
+            font-weight: bold; width: 250px; outline: none; font-size: 1rem;
         }
 
+        /* TABLE STYLES */
         .content-container {
             width: 100%; 
             flex-grow: 1;
@@ -128,134 +139,40 @@
             overflow: hidden; 
         }
 
-        table { 
-            width: 100%; 
-            height: 100%; 
-            border-collapse: separate; 
-            border-spacing: 2px; 
-            table-layout: fixed; 
-        }
-
-        th { 
-            background: rgba(0, 243, 255, 0.1); 
-            color: var(--neon-blue); 
-            font-size: 0.85rem; 
-            padding: 5px; 
-            border: 1px solid var(--neon-blue); 
-        }
-
-        td { 
-            background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            position: relative; 
-        }
+        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 2px; table-layout: fixed; }
+        th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.85rem; padding: 5px; border: 1px solid var(--neon-blue); }
+        td { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; }
         
-        .active-row td:first-child { 
-            background: var(--neon-blue) !important; 
-            color: black !important; 
-            font-weight: 900; 
-        }
+        .active-row td:first-child { background: var(--neon-blue) !important; color: black !important; font-weight: 900; }
+        .active-period { border: 3px solid var(--neon-green) !important; animation: pulseGlow 2s infinite ease-in-out; z-index: 10; }
 
-        .active-period { 
-            border: 3px solid var(--neon-green) !important; 
-            animation: pulseGlow 2s infinite ease-in-out; 
-            z-index: 10; 
-        }
-
-        .progress-container {
-            width: 90%; 
-            height: 4px; 
-            background: rgba(255,255,255,0.1);
-            margin: 2px auto; 
-            overflow: hidden; 
-        }
-
-        .progress-bar { 
-            height: 100%; 
-            width: 0%; 
-            background: var(--neon-green); 
-            transition: width 1s linear; 
-        }
-
-        .last-minutes { animation: blinkDanger 0.8s infinite !important; }
-
-        .sub-in { 
-            font-size: 1.4rem; 
-            color: var(--neon-green); 
-            width: 100%;
-            font-weight: 900; 
-            background: transparent; 
-            border: none; 
-            text-align: center; 
-            outline: none; 
-        }
-
-        .teach-in { 
-            font-size: 0.8rem; 
-            opacity: 0.8; 
-            width: 100%;
-            background: transparent; 
-            border: none; 
-            text-align: center; 
-            color: white; 
-            outline: none; 
-        }
-
-        .rehat-col { 
-            background: rgba(255, 0, 85, 0.15) !important; 
-            color: var(--neon-pink); 
-            font-weight: 900; 
-            font-size: 1.8rem; 
-            text-align: center; 
-            border: 1px solid var(--neon-pink) !important; 
-        }
+        .sub-in { font-size: 1.4rem; color: var(--neon-green); width: 100%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
+        .teach-in { font-size: 0.8rem; opacity: 0.8; width: 100%; background: transparent; border: none; text-align: center; color: white; outline: none; }
+        .rehat-col { background: rgba(255, 0, 85, 0.15) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.8rem; border: 1px solid var(--neon-pink) !important; }
 
         /* ANNOUNCEMENT BAR */
         #announcementBar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            position: fixed; bottom: 0; left: 0; width: 100%;
             background: linear-gradient(90deg, #ff0055, #ff9100);
-            color: white;
-            padding: 10px 0;
-            font-weight: 900;
-            font-size: 1.6rem;
-            z-index: 9999;
-            overflow: hidden;
-            display: none;
-            border-top: 2px solid white;
+            color: white; padding: 10px 0; font-weight: 900; font-size: 1.6rem;
+            z-index: 9999; overflow: hidden; display: none; border-top: 2px solid white;
         }
 
-        .marquee-content {
-            display: inline-block;
-            white-space: nowrap;
-            padding-left: 100%;
-            animation: marquee 20s linear infinite;
-        }
+        .marquee-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 20s linear infinite; }
 
-        /* BANNER AMARAN TAMAT WAKTU */
+        /* ALARM BANNER (TOP) */
         #alarmBanner {
-            position: fixed; 
-            top: -100px; 
-            left: 0; 
-            width: 100%; 
-            background: var(--danger-red);
-            color: white; 
-            padding: 10px; 
-            text-align: center; 
-            font-weight: 900; 
-            z-index: 5000; 
-            transition: 0.5s;
-            font-size: 1.2rem; 
+            position: fixed; top: -100px; left: 0; width: 100%; background: var(--danger-red);
+            color: white; padding: 10px; text-align: center; font-weight: 900; z-index: 5000;
+            transition: 0.5s; font-size: 1.2rem; 
         }
         #alarmBanner.active { top: 0; }
 
-        .btn-row { display: flex; gap: 5px; position: fixed; right: 5px; bottom: 50px; opacity: 0.1; transition: 0.3s; }
+        .btn-row { display: flex; gap: 5px; position: fixed; right: 5px; bottom: 50px; opacity: 0.05; transition: 0.3s; }
         .btn-row:hover { opacity: 1; }
-        .btn { padding: 5px 10px; font-size: 0.6rem; background: #222; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; }
+        .btn { padding: 5px 10px; font-size: 0.6rem; background: #222; color: white; border: 1px solid #444; cursor: pointer; }
 
-        /* COLORS */
+        /* SUBJECT COLORS */
         .color-BM { background: rgba(255, 0, 0, 0.2) !important; }
         .color-BI { background: rgba(0, 81, 255, 0.2) !important; }
         .color-MT { background: rgba(255, 242, 0, 0.15) !important; }
@@ -264,10 +181,12 @@
 </head>
 <body>
 
-    <div id="alarmBanner">INFO: SISTEM SEDIADA</div>
-    
-    <audio id="notifSound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
-    <audio id="periodSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+    <div id="giantPopup">
+        <div id="popupTitle">PENGUMUMAN BARU</div>
+        <div id="popupMsg">PENGUMUMAN DI SINI</div>
+    </div>
+
+    <div id="alarmBanner">INFO: SISTEM SEDIA</div>
 
     <div class="header-box">
         <div class="title-row">
@@ -288,7 +207,7 @@
     </div>
 
     <div class="content-container">
-        <table id="ttTable">
+        <table>
             <thead>
                 <tr>
                     <th style="width: 100px;">HARI</th>
@@ -312,7 +231,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBtA37bRurRoe7kCTUX_aIQHNv0cjWG09A",
@@ -332,13 +251,14 @@
         const slotStarts = [430, 460, 490, 520, 550, 600, 630, 660, 690, 720, 750];
         const slotEnds = [460, 490, 520, 550, 580, 630, 660, 690, 720, 750, 780];
         let lastAnnouncement = "";
-        let periodAlarmTriggered = false;
 
-        window.init = function() {
+        // BINA JADUAL
+        function initTable() {
             const tt = document.getElementById('ttBody');
+            tt.innerHTML = "";
             hariArr.forEach((h, i) => {
                 let row = `<tr id="row-${i}">`;
-                row += `<td style="color:var(--neon-blue); font-weight:900; text-align:center;">${h}</td>`;
+                row += `<td style="color:var(--neon-blue); font-weight:900;">${h}</td>`;
                 for(let j=0; j<12; j++) {
                     if(j === 5) row += `<td class="rehat-col">${"REHAT"[i] || ""}</td>`;
                     else {
@@ -351,54 +271,62 @@
                 row += `</tr>`;
                 tt.innerHTML += row;
             });
-
-            // LISTEN FIREBASE
-            onValue(dbRef, (snapshot) => {
-                const d = snapshot.val();
-                if (!d) return;
-                
-                if(d.t1) document.getElementById('teacher1').value = d.t1;
-                if(d.t2) document.getElementById('teacher2').value = d.t2;
-                
-                const inputs = document.querySelectorAll('.tt-in');
-                if(d.tt) d.tt.forEach((val, idx) => {
-                    if(inputs[idx]) {
-                        inputs[idx].value = val;
-                        if(inputs[idx].classList.contains('sub-in')) applyColor(inputs[idx]);
-                    }
-                });
-
-                // LOGIK PENGUMUMAN BERGERAK & BUNYI
-                const bar = document.getElementById('announcementBar');
-                const ticker = document.getElementById('tickerText');
-                const audio = document.getElementById('notifSound');
-
-                if (d.announcement && d.announcement.trim() !== "") {
-                    if (d.announcement !== lastAnnouncement) {
-                        audio.play().catch(e => console.log("Perlu Klik Skrin Dahulu"));
-                        lastAnnouncement = d.announcement;
-                    }
-                    ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
-                    bar.style.display = "block";
-                } else {
-                    bar.style.display = "none";
-                    lastAnnouncement = "";
-                }
-            });
-
-            setInterval(runSystem, 1000);
         }
 
+        // WARNA SUBJEK
         window.applyColor = (el) => {
             const val = el.value.toUpperCase();
             const td = el.closest('td');
-            td.className = 'slot-cell'; // reset
+            td.classList.remove('color-BM', 'color-BI', 'color-MT', 'color-SN');
             if(val.includes('BM')) td.classList.add('color-BM');
             if(val.includes('BI')) td.classList.add('color-BI');
             if(val.includes('MT')) td.classList.add('color-MT');
             if(val.includes('SN')) td.classList.add('color-SN');
         };
 
+        // LISTEN FIREBASE
+        onValue(dbRef, (snapshot) => {
+            const d = snapshot.val();
+            if (!d) return;
+            
+            if(d.t1) document.getElementById('teacher1').value = d.t1;
+            if(d.t2) document.getElementById('teacher2').value = d.t2;
+            
+            const inputs = document.querySelectorAll('.tt-in');
+            if(d.tt) d.tt.forEach((val, idx) => {
+                if(inputs[idx]) {
+                    inputs[idx].value = val;
+                    if(inputs[idx].classList.contains('sub-in')) applyColor(inputs[idx]);
+                }
+            });
+
+            // LOGIK POP-UP & MARQUEE
+            const popup = document.getElementById('giantPopup');
+            const popupMsg = document.getElementById('popupMsg');
+            const bar = document.getElementById('announcementBar');
+            const ticker = document.getElementById('tickerText');
+
+            if (d.announcement && d.announcement.trim() !== "") {
+                if (d.announcement !== lastAnnouncement) {
+                    // Cetus Pop-up
+                    popupMsg.innerText = d.announcement;
+                    popup.style.display = 'block';
+                    
+                    // Hilang selepas 15 saat
+                    setTimeout(() => { popup.style.display = 'none'; }, 15000);
+                    
+                    lastAnnouncement = d.announcement;
+                }
+                ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
+                bar.style.display = "block";
+            } else {
+                bar.style.display = "none";
+                popup.style.display = "none";
+                lastAnnouncement = "";
+            }
+        });
+
+        // SISTEM MASA (SETIAP SAAT)
         function runSystem() {
             const now = new Date();
             const timeStr = now.getHours().toString().padStart(2,'0') + ":" + 
@@ -413,7 +341,8 @@
             document.querySelectorAll('#ttBody tr').forEach(r => r.classList.remove('active-row'));
 
             if (currentDay >= 0 && currentDay <= 4) {
-                document.getElementById('row-' + currentDay).classList.add('active-row');
+                const activeRow = document.getElementById('row-' + currentDay);
+                if(activeRow) activeRow.classList.add('active-row');
                 
                 slotStarts.forEach((start, idx) => {
                     const end = slotEnds[idx];
@@ -422,19 +351,15 @@
                         const cell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${vSlot}"]`);
                         if(cell) {
                             cell.classList.add('active-period');
+                            
+                            // Amaran Tamat Waktu (Banner Merah)
                             const timeLeft = end - currentMins;
                             const banner = document.getElementById('alarmBanner');
-                            
-                            if(timeLeft <= 5) {
+                            if(timeLeft <= 5 && timeLeft > 0) {
                                 banner.innerText = `⚠️ WAKTU SEKARANG AKAN TAMAT DALAM ${timeLeft} MINIT!`;
                                 banner.classList.add('active');
-                                if(!periodAlarmTriggered) {
-                                    document.getElementById('periodSound').play().catch(()=>{});
-                                    periodAlarmTriggered = true;
-                                }
                             } else {
                                 banner.classList.remove('active');
-                                periodAlarmTriggered = false;
                             }
                         }
                     }
@@ -448,22 +373,21 @@
             const data = {
                 t1: document.getElementById('teacher1').value,
                 t2: document.getElementById('teacher2').value,
-                tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value)
+                tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
+                announcement: lastAnnouncement // Kekalkan mesej sedia ada
             };
-            set(dbRef, data).then(() => alert("OK!"));
+            set(dbRef, data).then(() => alert("Data Disimpan!"));
         };
 
         window.openFullscreen = () => {
-            document.documentElement.requestFullscreen();
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
         };
 
-        document.addEventListener('click', () => {
-            // Aktifkan audio selepas klik pertama (Syarat Browser)
-            document.getElementById('notifSound').load();
-            document.getElementById('periodSound').load();
-        });
-
-        init();
+        // Mula
+        initTable();
+        setInterval(runSystem, 1000);
     </script>
 </body>
 </html>
