@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Jadual Waktu 6C - SKAG</title>
-<style>
+    <style>
         :root {
             --neon-blue: #00f3ff;
             --neon-pink: #ff0055;
@@ -27,13 +27,18 @@
             100% { background: var(--danger-red); opacity: 1; }
         }
 
+        /* Animasi Teks Bergerak */
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
         * { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
             text-transform: uppercase; 
             font-family: 'Segoe UI', sans-serif; 
-            /* SEMBUNYIKAN KURSOR PADA SEMUA ELEMEN */
             cursor: none !important; 
         }
 
@@ -49,16 +54,11 @@
         }
 
         .header-box {
-            margin-top: 10px; 
-            margin-bottom: 5px;
+            margin-top: 5px; 
             background: var(--glass-bg); 
             padding: 10px 20px; 
-            border-radius: 10px;
-            border: 2px solid var(--neon-blue); 
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
-            /* DIKEMASKINI: GUNA 100% LEBAR TANPA HAD MAX-WIDTH */
+            border-bottom: 2px solid var(--neon-blue); 
             width: 100%; 
-            max-width: 100%; 
         }
 
         .title-row {
@@ -70,9 +70,10 @@
 
         .title-row h1 {
             grid-column: 2;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             letter-spacing: 2px;
-            white-space: nowrap;
+            color: white;
+            text-shadow: 0 0 10px var(--neon-blue);
         }
 
         .clock {
@@ -80,93 +81,79 @@
             justify-self: end;
             color: var(--neon-blue); 
             font-weight: 900; 
-            font-size: 1.6rem; 
+            font-size: 1.8rem; 
             background: rgba(0,0,0,0.5); 
             padding: 5px 15px; 
             border-radius: 8px;
             border: 1px solid var(--neon-blue);
             text-shadow: 0 0 10px var(--neon-blue);
-            letter-spacing: 2px;
-            min-width: 150px;
+            min-width: 160px;
             text-align: center;
         }
 
         .teacher-container {
             display: flex; 
-            gap: 10px; 
+            gap: 15px; 
             justify-content: center; 
             margin-top: 8px; 
-            flex-wrap: wrap;
         }
         
         .teacher-badge {
             background: rgba(0, 243, 255, 0.05); 
-            border: 1px solid rgba(0, 243, 255, 0.5);
-            padding: 4px 12px; 
-            border-radius: 20px; 
-            font-size: 0.65rem; 
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 5px 15px; 
+            border-radius: 4px; 
             display: flex; 
             align-items: center; 
-            gap: 8px;
+            gap: 10px;
         }
         
-        .teacher-label { color: var(--neon-blue); font-weight: 900; font-size: 0.9rem;}
+        .teacher-label { color: var(--neon-blue); font-weight: 900; font-size: 0.8rem;}
         
         .teacher-input-field {
             background: transparent; 
             border: none; 
             color: var(--neon-yellow);
             font-weight: bold; 
-            width: 350px; 
+            width: 280px; 
             outline: none; 
-            text-align: left; 
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .content-container {
-            /* DIKEMASKINI: PENUH KE TEPI KIRI DAN KANAN */
             width: 100%; 
-            max-width: 100%; 
             flex-grow: 1;
             background: var(--card-bg); 
-            border-radius: 0; 
-            border: none;
             padding: 5px;
-            backdrop-filter: blur(15px); 
             overflow: hidden; 
-            margin-bottom: 0;
         }
 
         table { 
             width: 100%; 
             height: 100%; 
             border-collapse: separate; 
-            border-spacing: 3px; 
+            border-spacing: 2px; 
             table-layout: fixed; 
         }
 
         th { 
             background: rgba(0, 243, 255, 0.1); 
             color: var(--neon-blue); 
-            font-size: 0.9rem; 
-            padding: 4px; 
-            border-radius: 4px; 
+            font-size: 0.85rem; 
+            padding: 5px; 
             border: 1px solid var(--neon-blue); 
         }
 
         td { 
-            background: rgba(255, 255, 255, 0.03); 
-            border-radius: 4px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
             position: relative; 
-            overflow: hidden; 
         }
         
         .active-row td:first-child { 
             background: var(--neon-blue) !important; 
             color: black !important; 
             font-weight: 900; 
-            box-shadow: 0 0 15px var(--neon-blue);
         }
 
         .active-period { 
@@ -176,38 +163,26 @@
         }
 
         .progress-container {
-            width: 95%; 
-            height: 5px; 
+            width: 90%; 
+            height: 4px; 
             background: rgba(255,255,255,0.1);
-            border-radius: 10px; 
             margin: 2px auto; 
             overflow: hidden; 
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .progress-bar { 
             height: 100%; 
             width: 0%; 
             background: var(--neon-green); 
-            box-shadow: 0 0 10px var(--neon-green); 
             transition: width 1s linear; 
         }
 
         .last-minutes { animation: blinkDanger 0.8s infinite !important; }
 
-        .cell-content { 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; 
-            justify-content: center; 
-            position: relative; 
-            z-index: 2; 
-        }
-
         .sub-in { 
-            font-size: 1.5rem; 
+            font-size: 1.4rem; 
             color: var(--neon-green); 
-            height: 40%; 
+            width: 100%;
             font-weight: 900; 
             background: transparent; 
             border: none; 
@@ -216,9 +191,9 @@
         }
 
         .teach-in { 
-            font-size: 0.9rem; 
-            opacity: 0.7; 
-            height: 25%; 
+            font-size: 0.8rem; 
+            opacity: 0.8; 
+            width: 100%;
             background: transparent; 
             border: none; 
             text-align: center; 
@@ -227,70 +202,72 @@
         }
 
         .rehat-col { 
-            background: rgba(255, 0, 85, 0.2) !important; 
+            background: rgba(255, 0, 85, 0.15) !important; 
             color: var(--neon-pink); 
             font-weight: 900; 
-            font-size: 1.4rem; 
+            font-size: 1.8rem; 
             text-align: center; 
             border: 1px solid var(--neon-pink) !important; 
-            width: 35px; 
         }
 
-        /* WARNA SUBJEK */
-        .color-BM { background: rgba(255, 0, 0, 0.3) !important; border-color: #ff0000 !important; }
-        .color-BI { background: rgba(0, 81, 255, 0.3) !important; border-color: #0051ff !important; }
-        .color-MT { background: rgba(255, 242, 0, 0.2) !important; border-color: #fff200 !important; }
-        .color-SN { background: rgba(0, 255, 30, 0.2) !important; border-color: #00ff1e !important; }
-        .color-PAI { background: rgba(0, 234, 255, 0.2) !important; border-color: #00eaff !important; }
-        .color-PM { background: rgba(255, 0, 234, 0.2) !important; border-color: #ff00ea !important; }
-        .color-BA { background: rgba(162, 0, 255, 0.3) !important; border-color: #a200ff !important; }
-        .color-SJ, .color-SEJ { background: rgba(255, 145, 0, 0.3) !important; border-color: #ff9100 !important; }
-        .color-PSV { background: rgba(255, 0, 115, 0.25) !important; border-color: #ff0073 !important; }
-        .color-MZ { background: rgba(200, 0, 255, 0.2) !important; border-color: #c800ff !important; }
-        .color-RBT { background: rgba(139, 69, 19, 0.3) !important; border-color: #8b4513 !important; }
-        .color-PJ, .color-PK, .color-PJK { background: rgba(149, 255, 0, 0.2) !important; border-color: #95ff00 !important; }
-        .color-PIQPM { background: linear-gradient(135deg, rgba(0, 200, 150, 0.3), rgba(255, 0, 234, 0.3)) !important; border-color: #00ffaa !important; }
-        .color-PIUPM { background: linear-gradient(135deg, rgba(0, 255, 100, 0.3), rgba(255, 0, 234, 0.3)) !important; border-color: #00ff64 !important; }
+        /* ANNOUNCEMENT BAR */
+        #announcementBar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #ff0055, #ff9100);
+            color: white;
+            padding: 10px 0;
+            font-weight: 900;
+            font-size: 1.6rem;
+            z-index: 9999;
+            overflow: hidden;
+            display: none;
+            border-top: 2px solid white;
+        }
 
-        .btn-row { 
-            display: flex; 
-            gap: 10px; 
-            margin-bottom: 5px; 
-            padding: 5px; 
+        .marquee-content {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
         }
-        
-        .btn { 
-            padding: 6px 12px; 
-            background: transparent; 
-            border: 2px solid var(--neon-blue); 
-            color: var(--neon-blue); 
-            border-radius: 8px; 
-            font-weight: bold; 
-            font-size: 0.7rem; 
-        }
-        
+
+        /* BANNER AMARAN TAMAT WAKTU */
         #alarmBanner {
             position: fixed; 
-            top: -120px; 
+            top: -100px; 
             left: 0; 
             width: 100%; 
-            background: linear-gradient(90deg, #ff0055, #ff0000);
+            background: var(--danger-red);
             color: white; 
-            padding: 12px; 
+            padding: 10px; 
             text-align: center; 
             font-weight: 900; 
-            z-index: 4000; 
-            transition: 0.6s;
-            font-size: 1rem; 
-            border-bottom: 3px solid white;
+            z-index: 5000; 
+            transition: 0.5s;
+            font-size: 1.2rem; 
         }
         #alarmBanner.active { top: 0; }
+
+        .btn-row { display: flex; gap: 5px; position: fixed; right: 5px; bottom: 50px; opacity: 0.1; transition: 0.3s; }
+        .btn-row:hover { opacity: 1; }
+        .btn { padding: 5px 10px; font-size: 0.6rem; background: #222; color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer; }
+
+        /* COLORS */
+        .color-BM { background: rgba(255, 0, 0, 0.2) !important; }
+        .color-BI { background: rgba(0, 81, 255, 0.2) !important; }
+        .color-MT { background: rgba(255, 242, 0, 0.15) !important; }
+        .color-SN { background: rgba(0, 255, 30, 0.15) !important; }
     </style>
 </head>
 <body>
 
-    <div id="alarmBanner">INFO: MEMULAKAN SISTEM...</div>
-    <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+    <div id="alarmBanner">INFO: SISTEM SEDIADA</div>
+    
+    <audio id="notifSound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
+    <audio id="periodSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
     <div class="header-box">
         <div class="title-row">
@@ -300,38 +277,37 @@
         
         <div class="teacher-container">
             <div class="teacher-badge">
-                <span class="teacher-label">GURU KELAS 1:</span>
-                <input type="text" id="teacher1" class="teacher-input-field" placeholder="NAMA GURU 1">
+                <span class="teacher-label">GURU KELAS:</span>
+                <input type="text" id="teacher1" class="teacher-input-field" placeholder="-">
             </div>
             <div class="teacher-badge">
-                <span class="teacher-label">GURU KELAS 2:</span>
-                <input type="text" id="teacher2" class="teacher-input-field" placeholder="NAMA GURU 2">
+                <span class="teacher-label">PEMBANTU:</span>
+                <input type="text" id="teacher2" class="teacher-input-field" placeholder="-">
             </div>
         </div>
-        
-        <h2 style="font-size:0.75rem; opacity:0.8; margin-top:10px; text-align:center;">
-            <span id="todayDate" style="color:var(--neon-yellow);"></span>
-        </h2>
     </div>
 
     <div class="content-container">
         <table id="ttTable">
             <thead>
                 <tr>
-                    <th style="width: 80px;">HARI</th>
-                    <th>07:10-07:40</th><th>07:40-08:10</th><th>08:10-08:40</th><th>08:40-09:10</th><th>09:10-09:40</th>
-                    <th style="width: 40px;">REHAT</th>
-                    <th>10:00-10:30</th><th>10:30-11:00</th><th>11:00-11:30</th><th>11:30-12:00</th><th>12:00-12:30</th><th>12:30-01:00</th>
+                    <th style="width: 100px;">HARI</th>
+                    <th>07:10</th><th>07:40</th><th>08:10</th><th>08:40</th><th>09:10</th>
+                    <th style="width: 50px;">REHAT</th>
+                    <th>10:00</th><th>10:30</th><th>11:00</th><th>11:30</th><th>12:00</th><th>12:30</th>
                 </tr>
             </thead>
             <tbody id="ttBody"></tbody>
         </table>
     </div>
 
+    <div id="announcementBar">
+        <div id="tickerText" class="marquee-content"></div>
+    </div>
+
     <div class="btn-row">
-        <button class="btn" onclick="saveToFirebase()">💾 SIMPAN SEMUA</button>
-        <button class="btn" style="border-color:var(--neon-pink); color:var(--neon-pink);" onclick="resetFirebase()">🧹 PADAM DATA</button>
-        <button class="btn" onclick="openFullscreen()">🖥️ SKRIN PENUH</button>
+        <button class="btn" onclick="saveToFirebase()">SAVE</button>
+        <button class="btn" onclick="openFullscreen()">FULLSCREEN</button>
     </div>
 
     <script type="module">
@@ -345,8 +321,7 @@
             projectId: "jadualkelas-896ae",
             storageBucket: "jadualkelas-896ae.firebasestorage.app",
             messagingSenderId: "164261211870",
-            appId: "1:164261211870:web:03eb60e7276601953c1c4f",
-            measurementId: "G-QLP6G40QMM"
+            appId: "1:164261211870:web:03eb60e7276601953c1c4f"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -354,176 +329,141 @@
         const dbRef = ref(db, 'jadual_6c');
 
         const hariArr = ['ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT'];
-        const rehatTxt = ['R', 'E', 'H', 'A', 'T'];
-        const subjekList = ['BM','BI','MT','SN','PAI','PM','SJ','SEJ','PJ','PK','PJK','PSV','MZ','RBT','BA','PIQPM','PIUPM'];
         const slotStarts = [430, 460, 490, 520, 550, 600, 630, 660, 690, 720, 750];
         const slotEnds = [460, 490, 520, 550, 580, 630, 660, 690, 720, 750, 780];
-        const AUTH_KOD = "jadualwaktu";
-        let alarmTriggered = false;
+        let lastAnnouncement = "";
+        let periodAlarmTriggered = false;
 
         window.init = function() {
             const tt = document.getElementById('ttBody');
-            tt.innerHTML = ""; 
             hariArr.forEach((h, i) => {
-                let rTT = '<tr id="row-' + i + '">';
-                rTT += '<td style="color:var(--neon-blue); font-weight:900; text-align:center; font-size:0.75rem;">' + h + '</td>';
+                let row = `<tr id="row-${i}">`;
+                row += `<td style="color:var(--neon-blue); font-weight:900; text-align:center;">${h}</td>`;
                 for(let j=0; j<12; j++) {
-                    if(j === 5) {
-                        rTT += '<td class="rehat-col">' + rehatTxt[i] + '</td>';
-                    } else {
-                        rTT += '<td class="slot-cell" data-day="' + i + '" data-slot="' + j + '">';
-                        rTT += '<div class="cell-content">';
-                        rTT += '<input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">';
-                        rTT += '<input type="text" class="teach-in tt-in" placeholder="GURU">';
-                        rTT += '</div></td>';
+                    if(j === 5) row += `<td class="rehat-col">${"REHAT"[i] || ""}</td>`;
+                    else {
+                        row += `<td class="slot-cell" data-day="${i}" data-slot="${j}">
+                                    <input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">
+                                    <input type="text" class="teach-in tt-in" placeholder="-">
+                                </td>`;
                     }
                 }
-                rTT += '</tr>';
-                tt.innerHTML += rTT;
+                row += `</tr>`;
+                tt.innerHTML += row;
             });
 
+            // LISTEN FIREBASE
             onValue(dbRef, (snapshot) => {
                 const d = snapshot.val();
                 if (!d) return;
+                
                 if(d.t1) document.getElementById('teacher1').value = d.t1;
                 if(d.t2) document.getElementById('teacher2').value = d.t2;
-                const ttIn = document.querySelectorAll('.tt-in');
-                if (d.tt) {
-                    for (var i = 0; i < d.tt.length; i++) {
-                        if (ttIn[i]) {
-                            ttIn[i].value = d.tt[i];
-                            if (ttIn[i].classList.contains('sub-in')) applyColor(ttIn[i]);
-                        }
+                
+                const inputs = document.querySelectorAll('.tt-in');
+                if(d.tt) d.tt.forEach((val, idx) => {
+                    if(inputs[idx]) {
+                        inputs[idx].value = val;
+                        if(inputs[idx].classList.contains('sub-in')) applyColor(inputs[idx]);
                     }
+                });
+
+                // LOGIK PENGUMUMAN BERGERAK & BUNYI
+                const bar = document.getElementById('announcementBar');
+                const ticker = document.getElementById('tickerText');
+                const audio = document.getElementById('notifSound');
+
+                if (d.announcement && d.announcement.trim() !== "") {
+                    if (d.announcement !== lastAnnouncement) {
+                        audio.play().catch(e => console.log("Perlu Klik Skrin Dahulu"));
+                        lastAnnouncement = d.announcement;
+                    }
+                    ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
+                    bar.style.display = "block";
+                } else {
+                    bar.style.display = "none";
+                    lastAnnouncement = "";
                 }
             });
+
             setInterval(runSystem, 1000);
         }
 
         window.applyColor = (el) => {
-            let val = el.value.trim().toUpperCase().replace(/\s+/g, '');
-            if (val.includes('PIQ/PM')) val = 'PIQPM';
-            else if (val.includes('PIU/PM')) val = 'PIUPM';
-            else if (val === 'SEJARAH') val = 'SEJ';
-            else if (val.includes('PJ')) val = 'PJK';
+            const val = el.value.toUpperCase();
             const td = el.closest('td');
-            subjekList.forEach(s => td.classList.remove('color-' + s));
-            if (subjekList.includes(val)) td.classList.add('color-' + val);
+            td.className = 'slot-cell'; // reset
+            if(val.includes('BM')) td.classList.add('color-BM');
+            if(val.includes('BI')) td.classList.add('color-BI');
+            if(val.includes('MT')) td.classList.add('color-MT');
+            if(val.includes('SN')) td.classList.add('color-SN');
         };
 
         function runSystem() {
             const now = new Date();
-            const jam = now.getHours().toString().padStart(2, '0');
-            const min = now.getMinutes().toString().padStart(2, '0');
-            const saat = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('liveClock').innerText = jam + ":" + min + ":" + saat;
-            
-            try {
-                document.getElementById('todayDate').innerText = now.toLocaleDateString('ms-MY', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-            } catch(e) {
-                document.getElementById('todayDate').innerText = now.toDateString();
-            }
+            const timeStr = now.getHours().toString().padStart(2,'0') + ":" + 
+                            now.getMinutes().toString().padStart(2,'0') + ":" + 
+                            now.getSeconds().toString().padStart(2,'0');
+            document.getElementById('liveClock').innerText = timeStr;
 
             const currentMins = now.getHours() * 60 + now.getMinutes();
             const currentDay = now.getDay() - 1; 
 
-            document.querySelectorAll('.slot-cell').forEach(c => {
-                c.classList.remove('active-period');
-                const oldBar = c.querySelector('.progress-container');
-                if(oldBar) oldBar.remove();
-            });
-            document.querySelectorAll('#ttBody tr').forEach(row => row.classList.remove('active-row'));
+            document.querySelectorAll('.slot-cell').forEach(c => c.classList.remove('active-period'));
+            document.querySelectorAll('#ttBody tr').forEach(r => r.classList.remove('active-row'));
 
-            if (currentDay < 0 || currentDay > 4) {
-                document.getElementById('alarmBanner').classList.remove('active');
-                return; 
-            }
-
-            const rowToday = document.getElementById('row-' + currentDay);
-            if(rowToday) rowToday.classList.add('active-row');
-
-            slotStarts.forEach((start, idx) => {
-                const end = slotEnds[idx];
-                if (currentMins >= start && currentMins < end) {
-                    const visualSlot = (idx >= 5) ? (idx + 1) : idx;
-                    const activeCell = document.querySelector('.slot-cell[data-day="' + currentDay + '"][data-slot="' + visualSlot + '"]');
-                    
-                    if (activeCell) {
-                        activeCell.classList.add('active-period');
-                        const subIn = activeCell.querySelector('.sub-in');
-                        const currentSub = subIn ? subIn.value : "-";
-                        
-                        const total = end - start;
-                        const elapsed = currentMins - start;
-                        const percent = (elapsed / total) * 100;
-                        const timeLeft = end - currentMins;
-
-                        if(!activeCell.querySelector('.progress-container')) {
-                            let pContainer = document.createElement('div');
-                            pContainer.className = 'progress-container';
-                            const blinkClass = (timeLeft <= 5) ? 'last-minutes' : '';
-                            pContainer.innerHTML = '<div class="progress-bar ' + blinkClass + '" style="width:' + percent + '%"></div>';
-                            activeCell.querySelector('.cell-content').appendChild(pContainer);
-                        } else {
-                            const pBar = activeCell.querySelector('.progress-bar');
-                            if(pBar) {
-                                pBar.style.width = percent + "%";
-                                if(timeLeft <= 5) pBar.classList.add('last-minutes');
+            if (currentDay >= 0 && currentDay <= 4) {
+                document.getElementById('row-' + currentDay).classList.add('active-row');
+                
+                slotStarts.forEach((start, idx) => {
+                    const end = slotEnds[idx];
+                    if (currentMins >= start && currentMins < end) {
+                        const vSlot = (idx >= 5) ? (idx + 1) : idx;
+                        const cell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${vSlot}"]`);
+                        if(cell) {
+                            cell.classList.add('active-period');
+                            const timeLeft = end - currentMins;
+                            const banner = document.getElementById('alarmBanner');
+                            
+                            if(timeLeft <= 5) {
+                                banner.innerText = `⚠️ WAKTU SEKARANG AKAN TAMAT DALAM ${timeLeft} MINIT!`;
+                                banner.classList.add('active');
+                                if(!periodAlarmTriggered) {
+                                    document.getElementById('periodSound').play().catch(()=>{});
+                                    periodAlarmTriggered = true;
+                                }
+                            } else {
+                                banner.classList.remove('active');
+                                periodAlarmTriggered = false;
                             }
-                        }
-
-                        const banner = document.getElementById('alarmBanner');
-                        if(timeLeft <= 5 && currentSub !== "-" && currentSub !== "") {
-                            banner.innerText = "⚠️ " + currentSub + " TAMAT DALAM " + timeLeft + " MINIT!";
-                            banner.classList.add('active');
-                            if(!alarmTriggered) {
-                                document.getElementById('alarmSound').play().catch(() => {});
-                                alarmTriggered = true;
-                            }
-                        } else {
-                            banner.classList.remove('active');
-                            alarmTriggered = false;
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         window.saveToFirebase = () => {
-            const kod = prompt("KOD AKSES:");
-            if (kod !== AUTH_KOD) return alert("KOD SALAH!");
-            const data = { 
-                tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
+            const kod = prompt("KOD:");
+            if(kod !== "jadualwaktu") return;
+            const data = {
                 t1: document.getElementById('teacher1').value,
-                t2: document.getElementById('teacher2').value
+                t2: document.getElementById('teacher2').value,
+                tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value)
             };
-            set(dbRef, data).then(() => alert("✅ DISIMPAN!"));
+            set(dbRef, data).then(() => alert("OK!"));
         };
 
-        window.resetFirebase = () => {
-            const kod = prompt("KOD PADAM:");
-            if (kod !== AUTH_KOD) return alert("KOD SALAH!");
-            if(confirm("PADAM SEMUA?")) remove(dbRef).then(() => location.reload());
-        }
-
         window.openFullscreen = () => {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE11 */
-                elem.msRequestFullscreen();
-            }
-        }
+            document.documentElement.requestFullscreen();
+        };
+
+        document.addEventListener('click', () => {
+            // Aktifkan audio selepas klik pertama (Syarat Browser)
+            document.getElementById('notifSound').load();
+            document.getElementById('periodSound').load();
+        });
 
         init();
     </script>
 </body>
 </html>
-
-
-
-
-
-
