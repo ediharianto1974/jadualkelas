@@ -3,126 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Jadual 6C - Kawalan Pengumuman</title>
+    <title>Admin Jadual 6C</title>
     <style>
-        :root {
-            --neon-green: #39ff14;
-            --neon-red: #ff0055;
-            --bg-dark: #0a0a0c;
-            --card-bg: #16161a;
-        }
-
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
-            background: var(--bg-dark); 
-            color: white; 
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .card { 
-            background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 20px; 
-            border: 1px solid #333; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h2 { 
-            color: var(--neon-green); 
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-
-        p { color: #aaa; font-size: 0.9rem; }
-
-        input { 
-            width: 100%; 
-            padding: 15px; 
-            margin: 20px 0; 
-            border-radius: 10px; 
-            border: 2px solid #333; 
-            background: #0f0f12; 
-            color: white; 
-            font-size: 1.1rem; 
-            text-align: center;
-            box-sizing: border-box;
-            text-transform: uppercase;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--neon-green);
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
-        }
-
-        button { 
-            width: 100%; 
-            padding: 15px; 
-            margin: 8px 0; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border: none; 
-            font-size: 1rem; 
-            transition: transform 0.1s, opacity 0.2s;
-        }
-
-        button:active { transform: scale(0.98); }
-
-        .btn-send { 
-            background: var(--neon-green); 
-            color: black; 
-        }
-
-        .btn-clear { 
-            background: transparent; 
-            color: var(--neon-red);
-            border: 1px solid var(--neon-red);
-            margin-top: 15px;
-        }
-
-        .status-box {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            background: rgba(255,255,255,0.05);
-        }
-
-        #statusTxt { color: var(--neon-green); font-weight: bold; }
+        body { font-family: sans-serif; padding: 20px; background: #0a0a0a; color: white; text-align: center; }
+        .card { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #333; max-width: 400px; margin: auto; }
+        input { width: 100%; padding: 15px; margin: 15px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; font-size: 1.1rem; text-transform: uppercase; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; margin: 5px 0; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; }
+        .btn-send { background: #39ff14; color: black; }
+        .btn-clear { background: #ff0055; color: white; margin-top: 15px; }
+        .status { margin-top: 10px; font-size: 0.9rem; color: #39ff14; }
     </style>
 </head>
 <body>
 
+    <h2>🎮 KAWALAN 6C</h2>
     <div class="card">
-        <h2>🎮 KAWALAN 6C</h2>
-        <p>Mesej akan berkelip di skrin TV</p>
+        <p>Hantar Pengumuman Pop-up:</p>
+        <input type="text" id="msg" placeholder="CONTOH: SILA BERKUMPUL DI DEWAN">
         
-        <input type="text" id="msg" placeholder="TAIP PENGUMUMAN DI SINI..." autocomplete="off">
-        
-        <button class="btn-send" onclick="hantar()">🚀 HANTAR & FLASH SKRIN</button>
+        <button class="btn-send" onclick="hantar()">🚀 HANTAR KE TV (POP-UP)</button>
         <button class="btn-clear" onclick="padam()">❌ PADAM PENGUMUMAN</button>
-
-        <div class="status-box">
-            Status: <span id="statusTxt">Sedia</span>
-        </div>
+        
+        <div id="status" class="status">Status: Sedia</div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Konfigurasi Firebase anda
         const firebaseConfig = {
             apiKey: "AIzaSyBtA37bRurRoe7kCTUX_aIQHNv0cjWG09A",
             authDomain: "jadualkelas-896ae.firebaseapp.com",
@@ -135,52 +43,28 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
-        // Laluan data yang sama dengan index.html
         const targetRef = ref(db, 'jadual_6c');
 
-        // Fungsi Hantar
         window.hantar = () => {
             const txt = document.getElementById('msg').value.trim();
-            const status = document.getElementById('statusTxt');
+            if(!txt) return alert("Taip sesuatu!");
+
+            document.getElementById('status').innerText = "Menghantar...";
             
-            if(!txt) {
-                alert("Sila taip sesuatu sebelum hantar!");
-                return;
-            }
-            
-            status.innerText = "Menghantar...";
-            status.style.color = "#fff200"; // Kuning semasa proses
-            
-            update(targetRef, { 
-                announcement: txt 
-            })
+            update(targetRef, { announcement: txt })
             .then(() => {
-                status.innerText = "✅ BERJAYA DIHANTAR";
-                status.style.color = "#39ff14";
-                document.getElementById('msg').value = ""; // Kosongkan input selepas hantar
-                setTimeout(() => { status.innerText = "Sedia"; status.style.color = "#39ff14"; }, 3000);
-            })
-            .catch((err) => {
-                alert("Ralat: " + err.message);
-                status.innerText = "❌ GAGAL!";
-                status.style.color = "#ff0055";
+                document.getElementById('status').innerText = "✅ Berjaya! Pop-up muncul di TV.";
+                document.getElementById('msg').value = "";
+                setTimeout(() => { document.getElementById('status').innerText = "Status: Sedia"; }, 3000);
             });
         };
 
-        // Fungsi Padam
         window.padam = () => {
-            if(!confirm("Padam pengumuman sekarang?")) return;
-            
-            const status = document.getElementById('statusTxt');
-            
-            update(targetRef, { 
-                announcement: "" 
-            })
+            if(!confirm("Padam pengumuman?")) return;
+            update(targetRef, { announcement: "" })
             .then(() => {
-                status.innerText = "❌ PENGUMUMAN DIPADAM";
-                status.style.color = "#ff0055";
-                setTimeout(() => { status.innerText = "Sedia"; status.style.color = "#39ff14"; }, 2000);
+                document.getElementById('status').innerText = "Mesej dipadam.";
+                setTimeout(() => { document.getElementById('status').innerText = "Status: Sedia"; }, 2000);
             });
         };
     </script>
