@@ -184,11 +184,25 @@
         .btn-row:hover { opacity: 1; }
         .btn { padding: 5px 10px; font-size: 0.6rem; background: #222; color: white; border: 1px solid #444; cursor: pointer; }
 
-        /* SUBJECT COLORS */
-        .color-BM { background: rgba(255, 0, 0, 0.2) !important; }
-        .color-BI { background: rgba(0, 81, 255, 0.2) !important; }
-        .color-MT { background: rgba(255, 242, 0, 0.15) !important; }
-        .color-SN { background: rgba(0, 255, 30, 0.15) !important; }
+/* SUBJECT COLORS */
+        .color-BM    { background: rgba(255, 0, 0, 0.25) !important; }    /* Merah */
+        .color-BI    { background: rgba(0, 81, 255, 0.25) !important; }   /* Biru */
+        .color-MT    { background: rgba(255, 242, 0, 0.2) !important; }    /* Kuning */
+        .color-SN    { background: rgba(0, 255, 30, 0.2) !important; }     /* Hijau */
+        .color-PI    { background: rgba(156, 39, 176, 0.25) !important; }  /* Ungu */
+        .color-PM    { background: rgba(156, 39, 176, 0.25) !important; }  /* Ungu */
+        .color-PIUPM { background: rgba(142, 68, 173, 0.4) !important; }   /* Ungu Deep */
+        .color-PIQPM { background: rgba(125, 60, 152, 0.4) !important; }   /* Ungu Magenta */
+        .color-TAS   { background: rgba(22, 160, 133, 0.3) !important; }   /* Teal/Emerald (Tasmik) */
+        .color-SEJ   { background: rgba(255, 152, 0, 0.25) !important; }   /* Jingga */
+        .color-RBT   { background: rgba(0, 150, 136, 0.25) !important; }   /* Teal */
+        .color-PSV   { background: rgba(233, 30, 99, 0.25) !important; }   /* Pink */
+        .color-MZ    { background: rgba(103, 58, 183, 0.25) !important; }   /* Violet */
+        .color-PJK   { background: rgba(139, 195, 74, 0.25) !important; }   /* Lime */
+        .color-PJ    { background: rgba(76, 175, 80, 0.3) !important; }    /* Hijau Daun */
+        .color-PK    { background: rgba(129, 199, 132, 0.3) !important; }   /* Hijau Muda */
+        .color-BA    { background: rgba(121, 85, 72, 0.25) !important; }    /* Coklat */
+        .color-PER   { background: rgba(255, 255, 255, 0.15) !important; }  /* Kelabu */
     </style>
 </head>
 <body>
@@ -284,14 +298,45 @@
             });
         }
 
-        window.applyColor = (el) => {
+window.applyColor = (el) => {
             const val = el.value.toUpperCase();
             const td = el.closest('td');
-            td.classList.remove('color-BM', 'color-BI', 'color-MT', 'color-SN');
-            if(val.includes('BM')) td.classList.add('color-BM');
-            if(val.includes('BI')) td.classList.add('color-BI');
-            if(val.includes('MT')) td.classList.add('color-MT');
-            if(val.includes('SN')) td.classList.add('color-SN');
+            
+            // Padam semua class warna sedia ada
+            td.classList.remove(
+                'color-BM', 'color-BI', 'color-MT', 'color-SN', 'color-PI', 'color-PM', 
+                'color-PIUPM', 'color-PIQPM', 'color-TAS', 'color-SEJ', 'color-RBT', 
+                'color-PSV', 'color-MZ', 'color-PJK', 'color-PJ', 'color-PK', 'color-BA', 'color-PER'
+            );
+
+            // 1. Cek subjek teras
+            if(val.includes('BM'))  td.classList.add('color-BM');
+            if(val.includes('BI'))  td.classList.add('color-BI');
+            if(val.includes('MT'))  td.classList.add('color-MT');
+            if(val.includes('SN'))  td.classList.add('color-SN');
+            
+            // 2. Cek subjek Agama/Moral (Spesifik ke Umum)
+            if(val.includes('PIU/PM'))      td.classList.add('color-PIUPM');
+            else if(val.includes('PIQ/PM')) td.classList.add('color-PIQPM');
+            else if(val.includes('PI'))     td.classList.add('color-PI');
+            else if(val.includes('PM'))     td.classList.add('color-PM');
+            
+            // 3. Cek subjek lain
+            if(val.includes('TAS'))  td.classList.add('color-TAS');
+            if(val.includes('SEJ'))  td.classList.add('color-SEJ');
+            if(val.includes('RBT'))  td.classList.add('color-RBT');
+            if(val.includes('PSV'))  td.classList.add('color-PSV');
+            if(val.includes('MZ'))   td.classList.add('color-MZ');
+            if(val.includes('BA'))   td.classList.add('color-BA');
+            if(val.includes('PER'))  td.classList.add('color-PER');
+
+            // 4. Logik PJK, PJ, dan PK
+            if(val.includes('PJK')) {
+                td.classList.add('color-PJK');
+            } else {
+                if(val.includes('PJ')) td.classList.add('color-PJ');
+                if(val.includes('PK')) td.classList.add('color-PK');
+            }
         };
 
         onValue(dbRef, (snapshot) => {
@@ -402,6 +447,7 @@
     </script>
 </body>
 </html>
+
 
 
 
