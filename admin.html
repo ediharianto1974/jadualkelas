@@ -25,7 +25,15 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
         import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 
-        const firebaseConfig = { /* MASUKKAN CONFIG ANDA */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyBtA37bRurRoe7kCTUX_aIQHNv0cjWG09A",
+            authDomain: "jadualkelas-896ae.firebaseapp.com",
+            databaseURL: "https://jadualkelas-896ae-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "jadualkelas-896ae",
+            storageBucket: "jadualkelas-896ae.firebasestorage.app",
+            messagingSenderId: "164261211870",
+            appId: "1:164261211870:web:03eb60e7276601953c1c4f"
+        };
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
