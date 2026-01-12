@@ -23,7 +23,7 @@
 
         @keyframes pulseGlow {
             0% { box-shadow: 0 0 5px var(--neon-green); }
-            50% { box-shadow: 0 0 20px var(--neon-green); }
+            50% { box-shadow: 0 0 15px var(--neon-green); }
             100% { box-shadow: 0 0 5px var(--neon-green); }
         }
 
@@ -46,7 +46,7 @@
             color: white;
             height: 100vh; 
             width: 100vw; 
-            overflow: hidden;
+            overflow: hidden; /* Lock scrollbar utama */
             display: flex; 
             flex-direction: column; 
         }
@@ -61,25 +61,22 @@
             height: 85vh;
             background: var(--danger-red);
             color: white;
-            padding: 30px 50px;
-            border: 15px solid white;
-            border-radius: 50px;
+            padding: 20px;
+            border: 10px solid white;
+            border-radius: 40px;
             text-align: center;
             z-index: 10000;
-            box-shadow: 0 0 150px rgba(255,0,0,1);
+            box-shadow: 0 0 100px rgba(255,0,0,1);
             animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        #popupTitle { font-size: 2.5rem; font-weight: 900; margin-bottom: 20px; border-bottom: 5px solid white; padding-bottom: 10px; letter-spacing: 5px; flex-shrink: 0; }
-        #popupMsg { font-weight: 900; line-height: 1.1; word-wrap: break-word; overflow-wrap: break-word; width: 100%; max-height: 100%; display: block; }
-
-        /* HEADER */
+        /* HEADER (Lebih nipis) */
         .header-box {
             background: var(--glass-bg); 
-            padding: 10px 20px; 
+            padding: 5px 20px; 
             border-bottom: 2px solid var(--neon-blue); 
             width: 100%; 
             flex-shrink: 0;
@@ -94,9 +91,8 @@
 
         .title-row h1 {
             grid-column: 2;
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             text-shadow: 0 0 10px var(--neon-blue);
-            text-align: center;
         }
 
         .clock {
@@ -104,174 +100,156 @@
             justify-self: end;
             color: var(--neon-blue); 
             font-weight: 900; 
-            font-size: 1.8rem; 
+            font-size: 1.5rem; 
             background: rgba(0,0,0,0.5); 
-            padding: 5px 15px; 
-            border-radius: 8px;
+            padding: 2px 10px; 
+            border-radius: 6px;
             border: 1px solid var(--neon-blue);
         }
 
         .teacher-container {
-            display: flex; gap: 15px; justify-content: center; margin-top: 5px; 
+            display: flex; gap: 10px; justify-content: center; margin-top: 2px; 
         }
         
         .teacher-badge {
-            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3);
-            padding: 3px 12px; border-radius: 4px; display: flex; align-items: center; gap: 8px;
+            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2);
+            padding: 1px 8px; border-radius: 4px; display: flex; align-items: center; gap: 5px;
         }
         
-        .teacher-label { color: var(--neon-blue); font-weight: 900; font-size: 0.7rem;}
+        .teacher-label { color: var(--neon-blue); font-weight: 900; font-size: 0.6rem;}
         .teacher-input-field {
             background: transparent; border: none; color: var(--neon-yellow);
-            font-weight: bold; width: 200px; outline: none; font-size: 0.9rem;
+            font-weight: bold; width: 160px; outline: none; font-size: 0.75rem;
         }
 
         /* MAIN DASHBOARD LAYOUT */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 260px 1fr 280px; /* Lebarkan sedikit panel kanan untuk legend */
-            gap: 10px;
-            padding: 10px;
+            grid-template-columns: 210px 1fr 220px; /* Mengecilkan sidebar */
+            gap: 8px;
+            padding: 8px;
             flex-grow: 1;
             overflow: hidden;
         }
 
         .sidebar {
             background: var(--card-bg);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            border-radius: 12px;
-            padding: 15px;
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            border-radius: 10px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            overflow-y: auto;
+            gap: 4px; /* Rapatkan gap antara card */
+            overflow: hidden; /* Buang skrol sidebar */
         }
 
         .sidebar-title {
             color: var(--neon-yellow);
             font-weight: 900;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             text-align: center;
             border-bottom: 2px solid var(--neon-yellow);
-            padding-bottom: 8px;
-            margin-bottom: 5px;
+            padding-bottom: 4px;
+            margin-bottom: 2px;
         }
 
-        .info-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--neon-blue);
-            padding: 8px 12px;
+        .info-card, .duty-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4px 8px;
             border-radius: 4px;
         }
 
-        .duty-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--neon-pink);
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin-bottom: 4px;
-        }
+        .info-card { border-left: 3px solid var(--neon-blue); }
+        .duty-card { border-left: 3px solid var(--neon-pink); margin-bottom: 2px; }
 
-        .side-label { color: var(--neon-blue); font-size: 0.65rem; font-weight: 900; display: block; }
-        .side-name { font-size: 0.8rem; font-weight: bold; color: #fff; display: block; margin-top: 3px; line-height: 1.2; }
+        .side-label { color: var(--neon-blue); font-size: 0.55rem; font-weight: 900; display: block; }
+        .side-name { font-size: 0.7rem; font-weight: bold; color: #fff; display: block; margin-top: 1px; line-height: 1.1; }
 
-        /* STYLES UNTUK LEGEND */
+        /* LEGEND (Sangat Kompak) */
         .legend-container {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-top: 5px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2px;
+            margin-top: 2px;
         }
         .legend-item {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 4px 10px;
-            border-radius: 4px;
-            border-left: 3px solid var(--neon-green);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 2px 6px;
+            border-radius: 3px;
+            border-left: 2px solid var(--neon-green);
         }
         .legend-code {
             font-weight: 900;
             color: var(--neon-green);
-            width: 45px;
-            font-size: 0.75rem;
+            width: 35px;
+            font-size: 0.6rem;
         }
         .legend-name {
-            font-size: 0.7rem;
-            color: #ccc;
-            letter-spacing: 0.5px;
+            font-size: 0.6rem;
+            color: #aaa;
         }
 
         /* TABLE AREA */
         .content-container {
-            background: var(--card-bg); border-radius: 12px; padding: 5px; overflow: hidden; 
+            background: var(--card-bg); border-radius: 10px; padding: 4px; overflow: hidden; 
         }
 
-        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 2px; table-layout: fixed; }
-        th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.75rem; padding: 5px; border: 1px solid var(--neon-blue); }
-        td { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); text-align: center; position: relative; }
+        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 1px; table-layout: fixed; }
+        th { background: rgba(0, 243, 255, 0.1); color: var(--neon-blue); font-size: 0.65rem; padding: 4px; border: 1px solid var(--neon-blue); }
+        td { background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.03); text-align: center; position: relative; }
         
         .active-row td:first-child { background: var(--neon-blue) !important; color: black !important; font-weight: 900; }
-        .active-period { border: 3px solid var(--neon-green) !important; animation: pulseGlow 2s infinite ease-in-out; z-index: 10; }
+        .active-period { border: 2px solid var(--neon-green) !important; animation: pulseGlow 2s infinite ease-in-out; z-index: 10; }
 
-        .sub-in { font-size: 0.8rem; color: var(--neon-green); width: 100%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
-        .teach-in { font-size: 0.6rem; opacity: 0.8; width: 100%; background: transparent; border: none; text-align: center; color: white; outline: none; }
-        .rehat-col { background: rgba(255, 0, 85, 0.1) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.5rem; border: 1px solid var(--neon-pink) !important; }
+        .sub-in { font-size: 0.7rem; color: var(--neon-green); width: 100%; font-weight: 900; background: transparent; border: none; text-align: center; outline: none; }
+        .teach-in { font-size: 0.5rem; opacity: 0.7; width: 100%; background: transparent; border: none; text-align: center; color: white; outline: none; }
+        .rehat-col { background: rgba(255, 0, 85, 0.1) !important; color: var(--neon-pink); font-weight: 900; font-size: 1.1rem; border: 1px solid var(--neon-pink) !important; }
 
-        /* ANNOUNCEMENT & BANNER */
+        /* ANNOUNCEMENT */
         #announcementBar {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: linear-gradient(90deg, #ff0055, #ff9100);
-            color: white; padding: 8px 0; font-weight: 900; font-size: 1.4rem;
+            color: white; padding: 4px 0; font-weight: 900; font-size: 1.1rem;
             z-index: 9999; overflow: hidden; display: none; border-top: 2px solid white;
         }
 
-        .marquee-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 40s linear infinite; }
+        .marquee-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: marquee 30s linear infinite; }
 
         #alarmBanner {
             position: fixed; top: -100px; left: 0; width: 100%; background: var(--danger-red);
-            color: white; padding: 10px; text-align: center; font-weight: 900; z-index: 5000;
-            transition: 0.5s; font-size: 1.2rem; 
+            color: white; padding: 6px; text-align: center; font-weight: 900; z-index: 5000;
+            transition: 0.5s; font-size: 1rem; 
         }
         #alarmBanner.active { top: 0; }
 
-        .btn-row { display: flex; gap: 5px; position: fixed; right: 5px; bottom: 50px; opacity: 0.05; transition: 0.3s; z-index: 1000; }
+        .btn-row { display: flex; gap: 5px; position: fixed; right: 5px; bottom: 40px; opacity: 0.02; transition: 0.3s; z-index: 1000; }
         .btn-row:hover { opacity: 1; }
-        .btn { padding: 5px 10px; font-size: 0.6rem; background: #222; color: white; border: 1px solid #444; cursor: pointer; }
+        .btn { padding: 3px 6px; font-size: 0.5rem; background: #222; color: white; border: 1px solid #444; }
 
-        /* SUBJECT COLORS */
-        .color-BM    { background: rgba(255, 0, 0, 0.25) !important; }
-        .color-BI    { background: rgba(0, 81, 255, 0.25) !important; }
-        .color-MT    { background: rgba(255, 242, 0, 0.2) !important; }
-        .color-SN    { background: rgba(0, 255, 30, 0.2) !important; }
-        .color-PI    { background: rgba(156, 39, 176, 0.25) !important; }
-        .color-PM    { background: rgba(156, 39, 176, 0.25) !important; }
-        .color-PIUPM { background: rgba(142, 68, 173, 0.4) !important; }
-        .color-PIQPM { background: rgba(125, 60, 152, 0.4) !important; }
-        .color-TAS   { background: rgba(22, 160, 133, 0.3) !important; }
-        .color-SEJ   { background: rgba(255, 152, 0, 0.25) !important; }
-        .color-RBT   { background: rgba(0, 150, 136, 0.25) !important; }
-        .color-PSV   { background: rgba(233, 30, 99, 0.25) !important; }
-        .color-MZ    { background: rgba(103, 58, 183, 0.25) !important; }
-        .color-PJK   { background: rgba(139, 195, 74, 0.25) !important; }
-        .color-PJ    { background: rgba(76, 175, 80, 0.3) !important; }
-        .color-PK    { background: rgba(129, 199, 132, 0.3) !important; }
-        .color-BA    { background: rgba(121, 85, 72, 0.25) !important; }
-        .color-PER   { background: rgba(255, 255, 255, 0.15) !important; }
+        /* SUBJECT COLORS (Opacity dikurangkan sedikit) */
+        .color-BM    { background: rgba(255, 0, 0, 0.2) !important; }
+        .color-BI    { background: rgba(0, 81, 255, 0.2) !important; }
+        .color-MT    { background: rgba(255, 242, 0, 0.15) !important; }
+        .color-SN    { background: rgba(0, 255, 30, 0.15) !important; }
+        .color-PI    { background: rgba(156, 39, 176, 0.2) !important; }
+        .color-SEJ   { background: rgba(255, 152, 0, 0.2) !important; }
+        .color-BA    { background: rgba(121, 85, 72, 0.2) !important; }
     </style>
 </head>
 <body>
 
     <div id="giantPopup">
-        <div id="popupTitle">PENGUMUMAN BARU</div>
-        <div id="popupMsg">PENGUMUMAN DI SINI</div>
+        <div style="font-size: 2rem; font-weight: 900; border-bottom: 4px solid white; margin-bottom: 15px;">PENGUMUMAN</div>
+        <div id="popupMsg" style="line-height: 1.1; font-weight: 900;"></div>
     </div>
 
     <div id="alarmBanner">INFO: SISTEM SEDIA</div>
 
     <div class="header-box">
         <div class="title-row">
-            <div style="font-weight: 900; color: var(--neon-blue); font-size: 0.8rem;">SK ABANG GESA BELAWAI</div>
+            <div style="font-weight: 900; color: var(--neon-blue); font-size: 0.6rem;">SK ABANG GESA BELAWAI</div>
             <h1>6 CEMERLANG SMART DASHBOARD</h1>
             <div id="liveClock" class="clock">00:00:00</div>
         </div>
@@ -291,35 +269,20 @@
     <div class="dashboard-grid">
         <div class="sidebar">
             <div class="sidebar-title">STRUKTUR KELAS</div>
-            <div class="info-card">
-                <span class="side-label">KETUA KELAS</span>
-                <span class="side-name">MUHAMMAD AINUL SOFWA</span>
-            </div>
-            <div class="info-card">
-                <span class="side-label">PENOLONG KETUA</span>
-                <span class="side-name">NURAFISHA MYA</span>
-            </div>
-            <div class="info-card">
-                <span class="side-label">AJK KEBERSIHAN</span>
-                <span class="side-name">NURALISSA</span>
-            </div>
-            <div class="info-card">
-                <span class="side-label">AJK KECERIAAN</span>
-                <span class="side-name">NUR AMARA QALESYA</span>
-            </div>
-            <div class="info-card">
-                <span class="side-label">AJK KESELAMATAN</span>
-                <span class="side-name">FABRIZIO RAVANELLI HUSSIEN</span>
-            </div>
+            <div class="info-card"><span class="side-label">KETUA KELAS</span><span class="side-name">MUHAMMAD AINUL SOFWA</span></div>
+            <div class="info-card"><span class="side-label">PENOLONG KETUA</span><span class="side-name">NURAFISHA MYA</span></div>
+            <div class="info-card"><span class="side-label">AJK KEBERSIHAN</span><span class="side-name">NURALISSA</span></div>
+            <div class="info-card"><span class="side-label">AJK KECERIAAN</span><span class="side-name">NUR AMARA QALESYA</span></div>
+            <div class="info-card"><span class="side-label">AJK KESELAMATAN</span><span class="side-name">FABRIZIO RAVANELLI</span></div>
         </div>
 
         <div class="content-container">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 80px;">HARI</th>
+                        <th style="width: 60px;">HARI</th>
                         <th>07:10</th><th>07:40</th><th>08:10</th><th>08:40</th><th>09:10</th>
-                        <th style="width: 35px;">R</th>
+                        <th style="width: 25px;">R</th>
                         <th>10:00</th><th>10:30</th><th>11:00</th><th>11:30</th><th>12:00</th><th>12:30</th>
                     </tr>
                 </thead>
@@ -331,19 +294,19 @@
             <div class="sidebar-title" id="dutyDayTitle">JADUAL BERTUGAS</div>
             <div id="dutyList"></div>
 
-            <div class="sidebar-title" style="margin-top: 10px; color: var(--neon-green); border-color: var(--neon-green);">LEGEND SUBJEK</div>
+            <div class="sidebar-title" style="margin-top: 5px; color: var(--neon-green); border-color: var(--neon-green);">LEGEND SUBJEK</div>
             <div class="legend-container">
-                <div class="legend-item"><span class="legend-code">BM</span><span class="legend-name">Bahasa Melayu</span></div>
-                <div class="legend-item"><span class="legend-code">BI</span><span class="legend-name">Bahasa Inggeris</span></div>
+                <div class="legend-item"><span class="legend-code">BM</span><span class="legend-name">B. Melayu</span></div>
+                <div class="legend-item"><span class="legend-code">BI</span><span class="legend-name">B. Inggeris</span></div>
                 <div class="legend-item"><span class="legend-code">MT</span><span class="legend-name">Matematik</span></div>
                 <div class="legend-item"><span class="legend-code">SN</span><span class="legend-name">Sains</span></div>
-                <div class="legend-item"><span class="legend-code">PIQ</span><span class="legend-name">P. Islam Quran</span></div>
-                <div class="legend-item"><span class="legend-code">PIU</span><span class="legend-name">P. Islam Ulum</span></div>
-                <div class="legend-item"><span class="legend-code">RBT</span><span class="legend-name">Reka Bentuk Tek.</span></div>
+                <div class="legend-item"><span class="legend-code">PIQ</span><span class="legend-name">P.I Quran</span></div>
+                <div class="legend-item"><span class="legend-code">PIU</span><span class="legend-name">P.I Ulum</span></div>
+                <div class="legend-item"><span class="legend-code">RBT</span><span class="legend-name">RBT</span></div>
                 <div class="legend-item"><span class="legend-code">SEJ</span><span class="legend-name">Sejarah</span></div>
                 <div class="legend-item"><span class="legend-code">PSV</span><span class="legend-name">Seni Visual</span></div>
-                <div class="legend-item"><span class="legend-code">BA</span><span class="legend-name">Bahasa Arab</span></div>
-                <div class="legend-item"><span class="legend-code">PJK</span><span class="legend-name">Jasmani Kesihatan</span></div>
+                <div class="legend-item"><span class="legend-code">BA</span><span class="legend-name">B. Arab</span></div>
+                <div class="legend-item"><span class="legend-code">PJK</span><span class="legend-name">Jasmani</span></div>
             </div>
         </div>
     </div>
@@ -354,7 +317,7 @@
 
     <div class="btn-row">
         <button class="btn" onclick="saveToFirebase()">SAVE</button>
-        <button class="btn" onclick="openFullscreen()">FULLSCREEN</button>
+        <button class="btn" onclick="openFullscreen()">FULL</button>
     </div>
 
     <script type="module">
@@ -379,24 +342,24 @@
         let lastAnnouncement = "";
 
         const dutyData = {
-            1: { day: "ISNIN", sweep: "AINUR ARISSA, DAYANG DEAFATHIA", chair: "AQMAR IQMAL", board: "DAIM BUKHARI" },
-            2: { day: "SELASA", sweep: "IZARA DAMIA, NOR IWANI SYAUQINA", chair: "FABRIZIO RAVANELLI", board: "MOHAMMAD QAZIM" },
-            3: { day: "RABU", sweep: "NUR AMARA QALESYA, NUR QAIRA ZULAIKHA", chair: "MUHAMAD HARITH HAKEEM", board: "MUHAMMAD AINUL SOFWA" },
-            4: { day: "KHAMIS", sweep: "NURAFISHA MYA, NURAFISHA MYA", chair: "MUHAMMAD HARRAZIRFAN", board: "MUHAMMAD SYAHIN UZAIR" },
-            5: { day: "JUMAAT", sweep: "NURUL FATIHAH, SYAAKIRAH ADAWIYYAH", chair: "RAKIP", board: "AQMAR IQMAL" }
+            1: { day: "ISNIN", sweep: "AINUR, DAYANG", chair: "AQMAR", board: "DAIM" },
+            2: { day: "SELASA", sweep: "IZARA, NOR IWANI", chair: "FABRIZIO", board: "QAZIM" },
+            3: { day: "RABU", sweep: "AMARA, QAIRA", chair: "HARITH", board: "AINUL" },
+            4: { day: "KHAMIS", sweep: "MYA, MYA", chair: "HARRAZ", board: "SYAHIN" },
+            5: { day: "JUMAAT", sweep: "FATIHAH, SYAAKIRAH", chair: "RAKIP", board: "AQMAR" }
         };
 
         function initTable() {
             const tt = document.getElementById('ttBody');
             tt.innerHTML = "";
             hariArr.forEach((h, i) => {
-                let row = `<tr id="row-${i}"><td style="color:var(--neon-blue); font-weight:900; font-size:0.75rem;">${h}</td>`;
+                let row = `<tr id="row-${i}"><td style="color:var(--neon-blue); font-weight:900; font-size:0.65rem;">${h}</td>`;
                 for(let j=0; j<12; j++) {
                     if(j === 5) row += `<td class="rehat-col">${"REHAT"[i] || ""}</td>`;
                     else row += `<td class="slot-cell" data-day="${i}" data-slot="${j}">
-                                    <input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">
-                                    <input type="text" class="teach-in tt-in" placeholder="-">
-                                 </td>`;
+                        <input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">
+                        <input type="text" class="teach-in tt-in" placeholder="-">
+                    </td>`;
                 }
                 tt.innerHTML += row + `</tr>`;
             });
@@ -406,27 +369,13 @@
             const val = el.value.toUpperCase();
             const td = el.closest('td');
             td.className = 'slot-cell'; 
-            
             if(val.includes('BM')) td.classList.add('color-BM');
             if(val.includes('BI')) td.classList.add('color-BI');
             if(val.includes('MT')) td.classList.add('color-MT');
             if(val.includes('SN')) td.classList.add('color-SN');
-            if(val.includes('PIU/PM')) td.classList.add('color-PIUPM');
-            else if(val.includes('PIQ/PM')) td.classList.add('color-PIQPM');
-            else if(val.includes('PI')) td.classList.add('color-PI');
-            else if(val.includes('PM')) td.classList.add('color-PM');
-            if(val.includes('TAS')) td.classList.add('color-TAS');
+            if(val.includes('PI')) td.classList.add('color-PI');
             if(val.includes('SEJ')) td.classList.add('color-SEJ');
-            if(val.includes('RBT')) td.classList.add('color-RBT');
-            if(val.includes('PSV')) td.classList.add('color-PSV');
-            if(val.includes('MZ')) td.classList.add('color-MZ');
             if(val.includes('BA')) td.classList.add('color-BA');
-            if(val.includes('PER')) td.classList.add('color-PER');
-            if(val.includes('PJK')) td.classList.add('color-PJK');
-            else {
-                if(val.includes('PJ')) td.classList.add('color-PJ');
-                if(val.includes('PK')) td.classList.add('color-PK');
-            }
         };
 
         function updateDutySidebar() {
@@ -435,7 +384,7 @@
             document.getElementById('dutyDayTitle').innerText = "TUGAS: " + data.day;
             document.getElementById('dutyList').innerHTML = `
                 <div class="duty-card"><span class="side-label">MENYAPU</span><span class="side-name">${data.sweep}</span></div>
-                <div class="duty-card"><span class="side-label">SUSUN KERUSI & MEJA</span><span class="side-name">${data.chair}</span></div>
+                <div class="duty-card"><span class="side-label">KERUSI/MEJA</span><span class="side-name">${data.chair}</span></div>
                 <div class="duty-card"><span class="side-label">PAPAN TULIS</span><span class="side-name">${data.board}</span></div>
             `;
         }
@@ -453,63 +402,38 @@
                 }
             });
 
-            const popup = document.getElementById('giantPopup');
-            const popupMsg = document.getElementById('popupMsg');
-            const bar = document.getElementById('announcementBar');
-            const ticker = document.getElementById('tickerText');
-
             if (d.announcement && d.announcement.trim() !== "") {
+                const popup = document.getElementById('giantPopup');
+                const popupMsg = document.getElementById('popupMsg');
+                const bar = document.getElementById('announcementBar');
+                const ticker = document.getElementById('tickerText');
+
                 if (d.announcement !== lastAnnouncement) {
                     popupMsg.innerText = d.announcement;
                     let len = d.announcement.length;
-                    if (len > 250) popupMsg.style.fontSize = "1.2rem";
-                    else if (len > 120) popupMsg.style.fontSize = "2.6rem";
-                    else if (len > 60) popupMsg.style.fontSize = "4.0rem";
-                    else popupMsg.style.fontSize = "6.5rem";
+                    popupMsg.style.fontSize = len > 100 ? "2rem" : "4rem";
                     popup.style.display = 'flex'; 
-                    setTimeout(() => { popup.style.display = 'none'; }, 15000);
+                    setTimeout(() => { popup.style.display = 'none'; }, 10000);
                     lastAnnouncement = d.announcement;
                 }
-                ticker.innerText = "📢 PENGUMUMAN: " + d.announcement + " • • • " + d.announcement;
+                ticker.innerText = "📢 " + d.announcement;
                 bar.style.display = "block";
-            } else {
-                bar.style.display = "none";
-                popup.style.display = "none";
-                lastAnnouncement = "";
             }
         });
 
         function runSystem() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('ms-MY', { hour12: false });
-            document.getElementById('liveClock').innerText = timeStr;
-
+            document.getElementById('liveClock').innerText = now.toLocaleTimeString('ms-MY', { hour12: false });
+            updateDutySidebar();
             const currentMins = now.getHours() * 60 + now.getMinutes();
             const currentDay = now.getDay() - 1; 
-
             document.querySelectorAll('.slot-cell').forEach(c => c.classList.remove('active-period'));
-            document.querySelectorAll('#ttBody tr').forEach(r => r.classList.remove('active-row'));
-
-            updateDutySidebar(); 
-
             if (currentDay >= 0 && currentDay <= 4) {
-                const activeRow = document.getElementById('row-' + currentDay);
-                if(activeRow) activeRow.classList.add('active-row');
-                
+                document.getElementById('row-' + currentDay)?.classList.add('active-row');
                 slotStarts.forEach((start, idx) => {
-                    const end = slotEnds[idx];
-                    if (currentMins >= start && currentMins < end) {
+                    if (currentMins >= start && currentMins < slotEnds[idx]) {
                         const vSlot = (idx >= 5) ? (idx + 1) : idx;
-                        const cell = document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${vSlot}"]`);
-                        if(cell) {
-                            cell.classList.add('active-period');
-                            const timeLeft = end - currentMins;
-                            const banner = document.getElementById('alarmBanner');
-                            if(timeLeft <= 5 && timeLeft > 0) {
-                                banner.innerText = `⚠️ WAKTU SEKARANG AKAN TAMAT DALAM ${timeLeft} MINIT!`;
-                                banner.classList.add('active');
-                            } else banner.classList.remove('active');
-                        }
+                        document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${vSlot}"]`)?.classList.add('active-period');
                     }
                 });
             }
@@ -523,7 +447,7 @@
                 t2: document.getElementById('teacher2').value,
                 tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
                 announcement: lastAnnouncement
-            }).then(() => alert("Data Disimpan!"));
+            }).then(() => alert("Saved!"));
         };
 
         window.openFullscreen = () => {
