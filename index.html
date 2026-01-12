@@ -327,27 +327,63 @@ body {
         <button class="btn" onclick="openFullscreen()">FULL</button>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBtA37bRurRoe7kCTUX_aIQHNv0cjWG09A",
-            authDomain: "jadualkelas-896ae.firebaseapp.com",
-            databaseURL: "https://jadualkelas-896ae-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "jadualkelas-896ae",
-            appId: "1:164261211870:web:03eb60e7276601953c1c4f"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBtA37bRurRoe7kCTUX_aIQHNv0cjWG09A",
+        authDomain: "jadualkelas-896ae.firebaseapp.com",
+        databaseURL: "https://jadualkelas-896ae-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "jadualkelas-896ae",
+        appId: "1:164261211870:web:03eb60e7276601953c1c4f"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const dbRef = ref(db, 'jadual_6c');
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const dbRef = ref(db, 'jadual_6c');
 
-        const hariArr = ['ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT'];
-        const slotStarts = [430, 460, 490, 520, 550, 600, 630, 660, 690, 720, 750];
-        const slotEnds = [460, 490, 520, 550, 580, 630, 660, 690, 720, 750, 780];
-        let lastAnnouncement = "";
+    const hariArr = ['ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT'];
+    const slotStarts = [430, 460, 490, 520, 550, 600, 630, 660, 690, 720, 750];
+    const slotEnds = [460, 490, 520, 550, 580, 630, 660, 690, 720, 750, 780];
+    let lastAnnouncement = "";
 
+    function initTable() {
+        const tt = document.getElementById('ttBody');
+        if(!tt) return;
+        tt.innerHTML = "";
+        hariArr.forEach((h, i) => {
+            let row = '<tr id="row-' + i + '"><td style="color:var(--neon-blue); font-weight:900; font-size:0.65rem;">' + h + '</td>';
+            for(let j=0; j<12; j++) {
+                if(j === 5) {
+                    row += '<td class="rehat-col">' + (["R","E","H","A","T"][i] || "") + '</td>';
+                } else {
+                    row += '<td class="slot-cell" data-day="' + i + '" data-slot="' + j + '">' +
+                           '<input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">' +
+                           '<input type="text" class="teach-in tt-in" placeholder="-">' +
+                           '</td>';
+                }
+            }
+            tt.innerHTML += row + '</tr>';
+        });
+    }
+
+    window.applyColor = (el) => {
+        const val = el.value.toUpperCase();
+        const td = el.closest('td');
+        if(!td) return;
+        td.className = 'slot-cell'; 
+        if(val.indexOf('BM') !== -1) td.classList.add('color-BM');
+        if(val.indexOf('BI') !== -1) td.classList.add('color-BI');
+        if(val.indexOf('MT') !== -1) td.classList.add('color-MT');
+        if(val.indexOf('SN') !== -1) td.classList.add('color-SN');
+        if(val.indexOf('PI') !== -1) td.classList.add('color-PI');
+        if(val.indexOf('SEJ') !== -1) td.classList.add('color-SEJ');
+        if(val.indexOf('BA') !== -1) td.classList.add('color-BA');
+    };
+
+    function updateDutySidebar() {
+        const today = new Date().getDay(); 
         const dutyData = {
             1: { day: "ISNIN", sweep: "AINUR ARISSA, DAYANG DEAFATHIA", chair: "AQMAR IQMAL", board: "DAIM BUKHARI" },
             2: { day: "SELASA", sweep: "IZARA DAMIA, NOR IWANI SYAUQINA", chair: "FABRIZIO RAVANELLI", board: "MOHAMMAD QAZIM" },
@@ -355,117 +391,104 @@ body {
             4: { day: "KHAMIS", sweep: "NURAFISHA MYA, NURALISSA", chair: "HARRAZ IRFAN", board: "MUHAMMA SYAHIN" },
             5: { day: "JUMAAT", sweep: "NURUL FATIHAH, SYAAKIRAH ADAWIYAH", chair: "RAKIP", board: "AQMAR IQMAL" }
         };
-
-        function initTable() {
-            const tt = document.getElementById('ttBody');
-            tt.innerHTML = "";
-            hariArr.forEach((h, i) => {
-                let row = `<tr id="row-${i}"><td style="color:var(--neon-blue); font-weight:900; font-size:0.65rem;">${h}</td>`;
-                for(let j=0; j<12; j++) {
-                    if(j === 5) row += `<td class="rehat-col">${"REHAT"[i] || ""}</td>`;
-                    else row += `<td class="slot-cell" data-day="${i}" data-slot="${j}">
-                        <input type="text" class="sub-in tt-in" oninput="applyColor(this)" placeholder="-">
-                        <input type="text" class="teach-in tt-in" placeholder="-">
-                    </td>`;
-                }
-                tt.innerHTML += row + `</tr>`;
-            });
+        const data = dutyData[today] || dutyData[1];
+        const titleEl = document.getElementById('dutyDayTitle');
+        const listEl = document.getElementById('dutyList');
+        if(titleEl) titleEl.innerText = "TUGAS: " + data.day;
+        if(listEl) {
+            listEl.innerHTML = 
+                '<div class="duty-card"><span class="side-label">MENYAPU</span><span class="side-name">' + data.sweep + '</span></div>' +
+                '<div class="duty-card"><span class="side-label">KERUSI/MEJA</span><span class="side-name">' + data.chair + '</span></div>' +
+                '<div class="duty-card"><span class="side-label">PAPAN TULIS</span><span class="side-name">' + data.board + '</span></div>';
         }
+    }
 
-        window.applyColor = (el) => {
-            const val = el.value.toUpperCase();
-            const td = el.closest('td');
-            td.className = 'slot-cell'; 
-            if(val.includes('BM')) td.classList.add('color-BM');
-            if(val.includes('BI')) td.classList.add('color-BI');
-            if(val.includes('MT')) td.classList.add('color-MT');
-            if(val.includes('SN')) td.classList.add('color-SN');
-            if(val.includes('PI')) td.classList.add('color-PI');
-            if(val.includes('SEJ')) td.classList.add('color-SEJ');
-            if(val.includes('BA')) td.classList.add('color-BA');
-        };
-
-        function updateDutySidebar() {
-            const today = new Date().getDay(); 
-            const data = dutyData[today] || dutyData[1];
-            document.getElementById('dutyDayTitle').innerText = "TUGAS: " + data.day;
-            document.getElementById('dutyList').innerHTML = `
-                <div class="duty-card"><span class="side-label">MENYAPU</span><span class="side-name">${data.sweep}</span></div>
-                <div class="duty-card"><span class="side-label">KERUSI/MEJA</span><span class="side-name">${data.chair}</span></div>
-                <div class="duty-card"><span class="side-label">PAPAN TULIS</span><span class="side-name">${data.board}</span></div>
-            `;
-        }
-
-        onValue(dbRef, (snapshot) => {
-            const d = snapshot.val();
-            if (!d) return;
-            if(d.t1) document.getElementById('teacher1').value = d.t1;
-            if(d.t2) document.getElementById('teacher2').value = d.t2;
-            const inputs = document.querySelectorAll('.tt-in');
-            if(d.tt) d.tt.forEach((val, idx) => {
+    onValue(dbRef, (snapshot) => {
+        const d = snapshot.val();
+        if (!d) return;
+        if(d.t1) document.getElementById('teacher1').value = d.t1;
+        if(d.t2) document.getElementById('teacher2').value = d.t2;
+        const inputs = document.querySelectorAll('.tt-in');
+        if(d.tt) {
+            d.tt.forEach((val, idx) => {
                 if(inputs[idx]) {
                     inputs[idx].value = val;
                     if(inputs[idx].classList.contains('sub-in')) applyColor(inputs[idx]);
                 }
             });
-
-            if (d.announcement && d.announcement.trim() !== "") {
-                const popup = document.getElementById('giantPopup');
-                const popupMsg = document.getElementById('popupMsg');
-                const bar = document.getElementById('announcementBar');
-                const ticker = document.getElementById('tickerText');
-
-                if (d.announcement !== lastAnnouncement) {
-                    popupMsg.innerText = d.announcement;
-                    let len = d.announcement.length;
-                    popupMsg.style.fontSize = len > 100 ? "2rem" : "4rem";
-                    popup.style.display = 'flex'; 
-                    setTimeout(() => { popup.style.display = 'none'; }, 10000);
-                    lastAnnouncement = d.announcement;
-                }
-                ticker.innerText = "📢 " + d.announcement;
-                bar.style.display = "block";
-            }
-        });
-
-        function runSystem() {
-            const now = new Date();
-            document.getElementById('liveClock').innerText = now.toLocaleTimeString('ms-MY', { hour12: false });
-            updateDutySidebar();
-            const currentMins = now.getHours() * 60 + now.getMinutes();
-            const currentDay = now.getDay() - 1; 
-            document.querySelectorAll('.slot-cell').forEach(c => c.classList.remove('active-period'));
-            if (currentDay >= 0 && currentDay <= 4) {
-                document.getElementById('row-' + currentDay)?.classList.add('active-row');
-                slotStarts.forEach((start, idx) => {
-                    if (currentMins >= start && currentMins < slotEnds[idx]) {
-                        const vSlot = (idx >= 5) ? (idx + 1) : idx;
-                        document.querySelector(`.slot-cell[data-day="${currentDay}"][data-slot="${vSlot}"]`)?.classList.add('active-period');
-                    }
-                });
-            }
         }
 
-        window.saveToFirebase = () => {
-            const kod = prompt("KOD:");
-            if(kod !== "jadualwaktu") return;
-            set(dbRef, {
-                t1: document.getElementById('teacher1').value,
-                t2: document.getElementById('teacher2').value,
-                tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
-                announcement: lastAnnouncement
-            }).then(() => alert("Saved!"));
-        };
+        if (d.announcement && d.announcement.trim() !== "") {
+            const popup = document.getElementById('giantPopup');
+            const popupMsg = document.getElementById('popupMsg');
+            const bar = document.getElementById('announcementBar');
+            const ticker = document.getElementById('tickerText');
 
-        window.openFullscreen = () => {
-            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-        };
+            if (d.announcement !== lastAnnouncement) {
+                if(popupMsg) {
+                    popupMsg.innerText = d.announcement;
+                    popupMsg.style.fontSize = d.announcement.length > 100 ? "2rem" : "4rem";
+                }
+                if(popup) popup.style.display = 'flex'; 
+                setTimeout(() => { if(popup) popup.style.display = 'none'; }, 10000);
+                lastAnnouncement = d.announcement;
+            }
+            if(ticker) ticker.innerText = "📢 " + d.announcement;
+            if(bar) bar.style.display = "block";
+        }
+    });
 
-        initTable();
-        setInterval(runSystem, 1000);
-    </script>
+    function runSystem() {
+        const now = new Date();
+        const clockEl = document.getElementById('liveClock');
+        if(clockEl) clockEl.innerText = now.getHours().toString().padStart(2, '0') + ":" + 
+                                       now.getMinutes().toString().padStart(2, '0') + ":" + 
+                                       now.getSeconds().toString().padStart(2, '0');
+        
+        updateDutySidebar();
+        const currentMins = now.getHours() * 60 + now.getMinutes();
+        const currentDay = now.getDay() - 1; 
+
+        document.querySelectorAll('.active-row').forEach(r => r.classList.remove('active-row'));
+        document.querySelectorAll('.active-period').forEach(c => c.classList.remove('active-period'));
+
+        if (currentDay >= 0 && currentDay <= 4) {
+            const rowEl = document.getElementById('row-' + currentDay);
+            if(rowEl) rowEl.classList.add('active-row');
+
+            slotStarts.forEach((start, idx) => {
+                if (currentMins >= start && currentMins < slotEnds[idx]) {
+                    const vSlot = (idx >= 5) ? (idx + 1) : idx;
+                    const cell = document.querySelector('.slot-cell[data-day="' + currentDay + '"][data-slot="' + vSlot + '"]');
+                    if(cell) cell.classList.add('active-period');
+                }
+            });
+        }
+    }
+
+    window.saveToFirebase = () => {
+        const kod = prompt("KOD:");
+        if(kod !== "jadualwaktu") return;
+        set(dbRef, {
+            t1: document.getElementById('teacher1').value,
+            t2: document.getElementById('teacher2').value,
+            tt: Array.from(document.querySelectorAll('.tt-in')).map(i => i.value),
+            announcement: lastAnnouncement
+        }).then(() => alert("Saved!"));
+    };
+
+    window.openFullscreen = () => {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) elem.requestFullscreen();
+        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+    };
+
+    initTable();
+    setInterval(runSystem, 1000);
+</script>
 </body>
 </html>
+
 
 
 
